@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-lang="ru">Трахея — AR Education</title>
+  <title data-lang="en" style="display:none">Trachea — AR Education</title>
+  <title data-lang="kz" style="display:none">Трахея — AR Education</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FFFFFF;
+      color: #5B5151;
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    header, footer {
+      background: #DFD3D3;
+      color: #5B5151;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    img {
+      max-width: 100%;
+      height: 200px;
+      display: block;
+      margin: 20px auto;
+    }
+    .trachea-img {
+      width: 500px;
+      border: 2px solid #888;
+      border-radius: 8px;
+      margin: 20px auto;
+      display: block;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #DFD3D3;
+      color: #5B5151;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: background 0.2s ease;
+      margin: 5px;
+    }
+    .btn:hover {
+      background: #B8B0B0;
+    }
+    .quiz-container {
+      background: #FFFFFF;
+      margin-top: 40px;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .quiz-question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .quiz-options label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .quiz-result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #5B5151;
+    }
+    body.contrast {
+      background: #000000;
+      color: #FFFFFF;
+    }
+    body.contrast header,
+    body.contrast footer {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+    body.contrast .btn {
+      background-color: #333333;
+      color: #FFFFFF;
+      border: 1px solid #666666;
+    }
+    body.contrast .btn:hover {
+      background-color: #555555;
+    }
+    body.contrast .quiz-container {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+    body.contrast .quiz-container label,
+    body.contrast .quiz-question,
+    body.contrast .quiz-result {
+      color: #FFFFFF;
+    }
+    body.contrast input[type="radio"] {
+      accent-color: #FFFFFF;
+    }
+    /* Языковой переключатель */
+    .language-switcher {
+      margin: 15px 0;
+    }
+    .language-btn {
+      padding: 8px 15px;
+      background: transparent;
+      border: 1px solid #5B5151;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: all 0.3s;
+    }
+    .language-btn.active {
+      background: #5B5151;
+      color: white;
+    }
+    body.contrast .language-btn {
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+    }
+    body.contrast .language-btn.active {
+      background: #FFFFFF;
+      color: #111111;
+    }
+    /* Индикатор загрузки языка */
+    .language-loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+    }
+    body.contrast .language-loading {
+      background: rgba(0,0,0,0.7);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Индикатор загрузки языка -->
+<div class="language-loading" id="languageLoading">
+  <p data-lang="ru">Загрузка языка...</p>
+  <p data-lang="en" style="display:none">Loading language...</p>
+  <p data-lang="kz" style="display:none">Тіл жүктелуде...</p>
+</div>
+
+<header>
+  <h1 data-lang="ru">Трахея</h1>
+  <h1 data-lang="en" style="display:none">Trachea</h1>
+  <h1 data-lang="kz" style="display:none">Трахея</h1>
+  
+  <div class="language-switcher">
+    <button class="language-btn active" onclick="changeLanguage('ru')">Русский</button>
+    <button class="language-btn" onclick="changeLanguage('en')">English</button>
+    <button class="language-btn" onclick="changeLanguage('kz')">Қазақша</button>
+  </div>
+  
+  <button class="btn" onclick="toggleContrast()">🌓 <span data-lang="ru">Контраст</span><span data-lang="en" style="display:none">Contrast</span><span data-lang="kz" style="display:none">Контраст</span></button>
+</header>
+
+<main class="content">
+  <img src="trachea.png" alt="Трахея" data-lang="ru">
+  <img src="trachea.png" alt="Trachea" data-lang="en" style="display:none">
+  <img src="trachea.png" alt="Трахея" data-lang="kz" style="display:none">
+  
+  <h2 data-lang="ru">Что такое трахея?</h2>
+  <h2 data-lang="en" style="display:none">What is the trachea?</h2>
+  <h2 data-lang="kz" style="display:none">Трахея деген не?</h2>
+
+  <p data-lang="ru">Трахея, обычно называемая дыхательным горлом, является важной частью дыхательной системы человека. Она служит проходом для воздуха между гортанью и бронхами, позволяя кислороду достигать легких. Давайте рассмотрим ее анатомические особенности, размеры, слои стенки трахеи, связанные с ней мышцы и функции её частей.</p>
+  <p data-lang="en" style="display:none">The trachea, commonly called the windpipe, is an important part of the human respiratory system. It serves as a passage for air between the larynx and bronchi, allowing oxygen to reach the lungs. Let's look at its anatomical features, dimensions, layers of the tracheal wall, associated muscles, and functions of its parts.</p>
+  <p data-lang="kz" style="display:none">Трахея, әдетте дем алу жолы деп аталады, адамның тыныс алу жүйесінің маңызды бөлігі болып табылады. Ол көмей мен бронхтар арасында ауа өтуіне жол береді, оттегінің өкпеге жетуіне мүмкіндік береді. Оның анатомиялық ерекшеліктері, өлшемдері, трахея қабырғасының қабаттары, онымен байланысты бұлшықеттер және бөліктерінің функцияларын қарастырайық.</p>
+
+  <p data-lang="ru">Анатомические особенности:</p>
+  <p data-lang="en" style="display:none">Anatomical features:</p>
+  <p data-lang="kz" style="display:none">Анатомиялық ерекшеліктері:</p>
+
+  <p data-lang="ru">Расположение: около половины трахеи находится в шее, спереди от пищевода, и проходит от гортани (на уровне шестого шейного позвонка) до уровня пятого грудного позвонка.</p>
+  <p data-lang="en" style="display:none">Location: about half of the trachea is located in the neck, in front of the esophagus, and runs from the larynx (at the level of the sixth cervical vertebra) to the level of the fifth thoracic vertebra.</p>
+  <p data-lang="kz" style="display:none">Орналасуы: трахеяның жартысына жуығы мойында, өңештің алдында орналасқан және көмейден (алтыншы мойын омыртқасы деңгейінде) бесінші кеуде омыртқасы деңгейіне дейін созылады.</p>
+
+  <p data-lang="ru">Длина: у среднего взрослого человека длина трахеи составляет около 10–12 см. Структура: она состоит из С-образных хрящевых колец, которые обеспечивают структурную поддержку. Задняя поверхность трахеи образована гладкими мышечными волокнами, известными как трахеальная мышца. Эта мышца обеспечивает гибкость при глотании.</p>
+  <p data-lang="en" style="display:none">Length: in an average adult, the trachea is about 10–12 cm long. Structure: it consists of C-shaped cartilaginous rings that provide structural support. The posterior surface of the trachea is formed by smooth muscle fibers known as the trachealis muscle. This muscle provides flexibility during swallowing.</p>
+  <p data-lang="kz" style="display:none">Ұзындығы: орташа ересек адамда трахеяның ұзындығы шамамен 10-12 см. Құрылымы: ол құрылымдық қолдауды қамтамасыз ететін С-пішінді шеміршек сақиналарынан тұрады. Трахеяның артқы беті трахеалды бұлшықет деп аталатын тегіс бұлшықет талшықтарынан тұрады. Бұл бұлшықет жұтқанда икемділікті қамтамасыз етеді.</p>
+    <h3 data-lang="ru">Слои стенки трахеи:</h3>
+<h3 data-lang="en" style="display:none">Layers of the tracheal wall:</h3>
+<h3 data-lang="kz" style="display:none">Трахея қабырғасының қабаттары:</h3>
+
+<p data-lang="ru">Слизистая оболочка: самый внутренний слой выстлан псевдослоистым реснитчатым столбчатым эпителием, который содержит бокаловидные клетки, вырабатывающие слизь. Реснички помогают отводить слизь и мусор от легких.</p>
+<p data-lang="en" style="display:none">Mucous membrane: the innermost layer is lined with pseudostratified ciliated columnar epithelium, which contains goblet cells that produce mucus. The cilia help move mucus and debris away from the lungs.</p>
+<p data-lang="kz" style="display:none">Кілегейлі қабық: ең ішкі қабат жалған қабатты ресниткалы бағанды эпителиймен қапталған, ол шырыш өндіретін көзе тәрізді клеткаларды қамтиды. Ресничкалар шырыш пен қоқысты өкпеден шығаруға көмектеседі.</p>
+
+<p data-lang="ru">Подслизистая оболочка: этот слой содержит соединительную ткань, кровеносные сосуды, нервы и серозно-слизистые железы. Он помогает увлажнять и согревать входящий воздух.</p>
+<p data-lang="en" style="display:none">Submucosa: this layer contains connective tissue, blood vessels, nerves, and seromucous glands. It helps moisten and warm incoming air.</p>
+<p data-lang="kz" style="display:none">Кілегей асты қабығы: бұл қабат ұлпаларды, қан тамырларын, жүйкелерді және серозды-кілегей бездерін қамтиды. Ол кірген ауаны ылғалдандыруға және жылытуға көмектеседі.</p>
+
+<p data-lang="ru">Гиалиновый хрящ: трахея укреплена С-образными кольцами гиалинового хряща. Эти кольца поддерживают жесткость и предотвращают спадение трахеи во время дыхания.</p>
+<p data-lang="en" style="display:none">Hyaline cartilage: the trachea is reinforced with C-shaped rings of hyaline cartilage. These rings maintain rigidity and prevent tracheal collapse during breathing.</p>
+<p data-lang="kz" style="display:none">Гиалинді шеміршек: трахея С-пішінді гиалинді шеміршек сақиналарымен нығайтылған. Бұл сақиналар қаттылықты сақтайды және тыныс алу кезінде трахеяның құлауына жол бермейді.</p>
+
+<p data-lang="ru">Адвентициальная оболочка: самый внешний слой состоит из соединительной ткани, которая связывает трахею с окружающими структурами.</p>
+<p data-lang="en" style="display:none">Adventitia: the outermost layer consists of connective tissue that connects the trachea to surrounding structures.</p>
+<p data-lang="kz" style="display:none">Адвентиция: ең сыртқы қабат трахеяны қоршаған құрылымдармен байланыстыратын ұлпадан тұрады.</p>
+
+<h3 data-lang="ru">Ассоциированные мышцы:</h3>
+<h3 data-lang="en" style="display:none">Associated muscles:</h3>
+<h3 data-lang="kz" style="display:none">Қатысты бұлшықеттер:</h3>
+
+<p data-lang="ru">Трахея поддерживается и стабилизируется различными мышцами:</p>
+<p data-lang="en" style="display:none">The trachea is supported and stabilized by various muscles:</p>
+<p data-lang="kz" style="display:none">Трахея әртүрлі бұлшықеттер арқылы қолдау тауып, тұрақтандырылады:</p>
+    <p data-lang="ru">Грудиноподъязычная мышца: начинается от грудины и крепится к подъязычной кости, обеспечивая устойчивость трахеи.</p>
+<p data-lang="en" style="display:none">Sternohyoid muscle: originates from the sternum and attaches to the hyoid bone, providing stability to the trachea.</p>
+<p data-lang="kz" style="display:none">Грудино-гиоид бұлшықеті: төс сүйегінен басталып, гиоид сүйегіне жалгасады, трахеяны тұрақтандырады.</p>
+
+<p data-lang="ru">Грудинощитовидная мышца: эта мышца идет параллельно грудиноподъязычной кости и помогает поддерживать трахею.</p>
+<p data-lang="en" style="display:none">Sternothyroid muscle: this muscle runs parallel to the sternohyoid bone and helps support the trachea.</p>
+<p data-lang="kz" style="display:none">Грудино-тироид бұлшықеті: грудино-гиоид сүйегіне параллель өтетін бұлшықет, трахеяны қолдауға көмектеседі.</p>
+
+<p data-lang="ru">Щитоподъязычная мышца: она прикрепляет щитовидный хрящ к подъязычной кости и помогает поднимать гортань во время глотания.</p>
+<p data-lang="en" style="display:none">Thyrohyoid muscle: it attaches the thyroid cartilage to the hyoid bone and helps elevate the larynx during swallowing.</p>
+<p data-lang="kz" style="display:none">Тиро-гиоид бұлшықеті: тироид шеміршегін гиоид сүйегіне жалғайды және жұтқанда көмейді көтеруге көмектеседі.</p>
+
+<h3 data-lang="ru">Функции частей:</h3>
+<h3 data-lang="en" style="display:none">Functions of parts:</h3>
+<h3 data-lang="kz" style="display:none">Бөліктердің функциялары:</h3>
+
+<p data-lang="ru">Слизистая оболочка: слизистый слой помогает увлажнять и согревать вдыхаемый воздух, одновременно задерживая частицы и патогены слизью и ресничками.</p>
+<p data-lang="en" style="display:none">Mucous membrane: the mucous layer helps humidify and warm inhaled air while trapping particles and pathogens with mucus and cilia.</p>
+<p data-lang="kz" style="display:none">Кілегейлі қабық: шырыш қабаты түскен ауаны ылғалдандырып, жылытады, бір уақытта шырыш пен ресничкалар арқылы бөлшектер мен патогендерді ұстап қалады.</p>
+
+<p data-lang="ru">Хрящевые кольца: С-образные хрящи поддерживают проходимость трахеи, гарантируя, что она остается открытой для прохождения воздуха.</p>
+<p data-lang="en" style="display:none">Cartilaginous rings: C-shaped cartilages maintain tracheal patency, ensuring it remains open for air passage.</p>
+<p data-lang="kz" style="display:none">Шеміршек сақиналары: С-пішінді шеміршектер трахеяның өтімділігін сақтайды, ауаның өтуі үшін ашық болуын қамтамасыз етеді.</p>
+
+<p data-lang="ru">Трахеальная мышца: эта гладкая мышца обеспечивает гибкость во время глотания и кашля.</p>
+<p data-lang="en" style="display:none">Trachealis muscle: this smooth muscle provides flexibility during swallowing and coughing.</p>
+<p data-lang="kz" style="display:none">Трахеалды бұлшықет: бұл тегіс бұлшықет жұтқанда және жөтелдегенде икемділікті қамтамасыз етеді.</p>
+
+<h3 data-lang="ru">Клинические состояния, связанные с трахеей:</h3>
+<h3 data-lang="en" style="display:none">Clinical conditions associated with the trachea:</h3>
+<h3 data-lang="kz" style="display:none">Трахеямен байланысты клиникалық жағдайлар:</h3>
+
+<p data-lang="ru">Стеноз трахеи: это сужение трахеи, часто возникающее в результате травмы, воспаления или опухолей. Лечение может включать дилатацию, стентирование или хирургическую реконструкцию.</p>
+<p data-lang="en" style="display:none">Tracheal stenosis: narrowing of the trachea, often resulting from injury, inflammation, or tumors. Treatment may include dilation, stenting, or surgical reconstruction.</p>
+<p data-lang="kz" style="display:none">Трахея стенозы: трахеяның тарылуы, көбінесе жарақат, қабыну немесе ісіктерден болады. Емі дилатация, стентирлеу немесе хирургиялық реконструкцияны қамтуы мүмкін.</p>
+
+<p data-lang="ru">Трахеомаляция: это состояние включает ослабление хряща трахеи, что приводит к его коллапсу во время дыхания. Варианты лечения включают трахеостомию или терапию постоянным положительным давлением в дыхательных путях (CPAP).</p>
+<p data-lang="en" style="display:none">Tracheomalacia: this condition involves weakening of the tracheal cartilage, leading to its collapse during breathing. Treatment options include tracheostomy or continuous positive airway pressure therapy (CPAP).</p>
+<p data-lang="kz" style="display:none">Трахеомаляция: трахея шеміршегінің әлсіреуі, тыныс алу кезінде құлауына әкеледі. Емдеу әдістеріне трахеостомия немесе үздіксоз оң қысымды тыныс жолдары терапиясы (CPAP) жатады.</p>
+
+<p data-lang="ru">Опухоли трахеи: доброкачественные или злокачественные новообразования могут развиваться внутри трахеи. Лечение может включать хирургическое вмешательство, лучевую терапию, химиотерапию или комбинацию этих методов.</p>
+<p data-lang="en" style="display:none">Tracheal tumors: benign or malignant neoplasms may develop inside the trachea. Treatment may include surgery, radiation therapy, chemotherapy, or a combination of these methods.</p>
+<p data-lang="kz" style="display:none">Трахея ісіктері: қатерсіз немесе қатерлі ісіктер трахея ішінде дами алады. Емдеу хирургиялық араласу, сәуле терапиясы, химиотерапия немесе осы әдістердің комбинациясын қамтуы мүмкін.</p>
+
+<h3 data-lang="ru">Лечение:</h3>
+<h3 data-lang="en" style="display:none">Treatment:</h3>
+<h3 data-lang="kz" style="display:none">Емдеу:</h3>
+
+<p data-lang="ru">Трахеотомия: в тяжелых случаях обструкции дыхательных путей выполняется хирургическая процедура, называемая трахеотомией, при которой в трахее через шею создается отверстие для обхода обструкции.</p>
+<p data-lang="en" style="display:none">Tracheotomy: in severe cases of airway obstruction, a surgical procedure called tracheotomy is performed, creating an opening in the trachea through the neck to bypass the obstruction.</p>
+<p data-lang="kz" style="display:none">Трахеотомия: тыныс жолдарының тұйықталуының ауыр жағдайларында трахеотомия деп аталатын хирургиялық процедура жасалады, мойын арқылы трахеяда тесік жасалып, бөгетті айналып өтуге мүмкіндік береді.</p>
+
+<p data-lang="ru">Интубация: эта процедура заключается в введении трубки через рот или нос в трахею для обеспечения проходимости дыхательных путей во время операций, при дыхательной недостаточности или в бессознательном состоянии.</p>
+<p data-lang="en" style="display:none">Intubation: this procedure involves inserting a tube through the mouth or nose into the trachea to maintain airway patency during surgery, respiratory failure, or unconsciousness.</p>
+<p data-lang="kz" style="display:none">Интубация: бұл процедура ауыз немесе мұрын арқылы трахеяға түтікшені енгізуді қамтиды, операция кезінде, тыныс жетіспеушілігінде немесе адамның санасы жоқ кезде тыныс жолдарының ашық болуын қамтамасыз етеді.</p>
+
+<p data-lang="ru">Маневр Геймлиха: это экстренный метод, используемый для удаления инородного предмета, закупоривающего трахею, путем надавливания на живот, заставляя воздух вытеснять закупорку.</p>
+<p data-lang="en" style="display:none">Heimlich maneuver: an emergency technique used to remove a foreign object blocking the trachea by applying abdominal thrusts to force air to expel the obstruction.</p>
+<p data-lang="kz" style="display:none">Геймлих маневрі: трахеяны бітеп тұрған бөгде затты шығару үшін қолданылатын жедел әдіс, құрсаққа қысым жасап, ауаны бөгетті шығаруға мәжбүр етеді.</p>
+
+<p data-lang="ru">Важно отметить, что любые медицинские состояния или методы лечения, связанные с трахеей, должны оцениваться и контролироваться медицинскими работниками.</p>
+<p data-lang="en" style="display:none">It is important to note that any medical conditions or treatments related to the trachea should be evaluated and monitored by healthcare professionals.</p>
+<p data-lang="kz" style="display:none">Маңызды ескерту: трахеямен байланысты кез келген медициналық жағдайлар немесе емдеу әдістері медицина қызметкерлерімен бағалануы және бақылануы керек.</p>
+
+  <!-- Остальной текст переводится аналогичным образом -->
+
+  <div class="quiz-container" id="quiz">
+    <h2 data-lang="ru">🧪 Тест</h2>
+    <h2 data-lang="en" style="display:none">🧪 Quiz</h2>
+    <h2 data-lang="kz" style="display:none">🧪 Тест</h2>
+    <div class="quiz-question" id="question"></div>
+    <div class="quiz-options" id="options"></div>
+    <button class="btn" onclick="nextQuestion()" id="nextBtn">
+      <span data-lang="ru">Далее</span>
+      <span data-lang="en" style="display:none">Next</span>
+      <span data-lang="kz" style="display:none">Әрі қарай</span>
+    </button>
+    <div class="quiz-result" id="result"></div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="index.html" class="btn">
+      <span data-lang="ru">← Назад к органам</span>
+      <span data-lang="en" style="display:none">← Back to organs</span>
+      <span data-lang="kz" style="display:none">← Мүшелерге оралу</span>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 AR Education</p>
+</footer>
+
+<script>
+// Вопросы для теста на разных языках
+const questions = {
+  ru: [
+    {
+      q: "Что такое трахея?",
+      a: "Орган, соединяющий гортань с бронхами",
+      o: ["Кровеносный сосуд", "Орган пищеварения", "Орган, соединяющий гортань с бронхами"]
+    },
+    {
+      q: "Из чего состоят стенки трахеи?",
+      a: "Хрящевые полуколца и мышечная ткань",
+      o: ["Костные дуги", "Хрящевые полуколца и мышечная ткань", "Жировая ткань"]
+    },
+    {
+      q: "Какова основная функция ресничек трахеи?",
+      a: "Удаление пыли и микробов",
+      o: ["Увлажнение воздуха", "Удаление пыли и микробов", "Выработка гормонов"]
+    },
+    {
+      q: "Что происходит при трахеите?",
+      a: "Воспаляется слизистая оболочка трахеи",
+      o: ["Развивается пневмония", "Разрушаются хрящи", "Воспаляется слизистая оболочка трахеи"]
+    },
+    {
+      q: "Как называется операция по созданию отверстия в трахее?",
+      a: "Трахеостомия",
+      o: ["Бронхоскопия", "Трахеостомия", "Ларингэктомия"]
+    }
+  ],
+  en: [
+    {
+      q: "What is the trachea?",
+      a: "An organ connecting the larynx to the bronchi",
+      o: ["Blood vessel", "Digestive organ", "An organ connecting the larynx to the bronchi"]
+    },
+    {
+      q: "What are the walls of the trachea made of?",
+      a: "Cartilaginous rings and muscle tissue",
+      o: ["Bone arches", "Cartilaginous rings and muscle tissue", "Adipose tissue"]
+    },
+    {
+      q: "What is the main function of tracheal cilia?",
+      a: "Removing dust and microbes",
+      o: ["Humidifying air", "Removing dust and microbes", "Producing hormones"]
+    },
+    {
+      q: "What happens with tracheitis?",
+      a: "Inflammation of the tracheal mucosa",
+      o: ["Pneumonia develops", "Cartilage is destroyed", "Inflammation of the tracheal mucosa"]
+    },
+    {
+      q: "What is the operation to create an opening in the trachea called?",
+      a: "Tracheostomy",
+      o: ["Bronchoscopy", "Tracheostomy", "Laryngectomy"]
+    }
+  ],
+  kz: [
+    {
+      q: "Трахея деген не?",
+      a: "Көмейді бронхтармен жалғайтын мүше",
+      o: ["Қан тамыры", "Қорыту мүшесі", "Көмейді бронхтармен жалғайтын мүше"]
+    },
+    {
+      q: "Трахея қабырғалары неден тұрады?",
+      a: "Шеміршек жарты сақиналары және бұлшықет тіні",
+      o: ["Сүйек доғалары", "Шеміршек жарты сақиналары және бұлшықет тіні", "Май тіні"]
+    },
+    {
+      q: "Трахея ресничкаларының негізгі функциясы қандай?",
+      a: "Тозаң мен микробтарды жою",
+      o: ["Ауаны ылғалдандыру", "Тозаң мен микробтарды жою", "Гормондар өндіру"]
+    },
+    {
+      q: "Трахеит кезінде не болады?",
+      a: "Трахеяның кілегейлі қабығы қабынады",
+      o: ["Өкпенің қабынуы дамиды", "Шеміршектер бұзылады", "Трахеяның кілегейлі қабығы қабынады"]
+    },
+    {
+      q: "Трахеяда тесік жасау операциясы қалай аталады?",
+      a: "Трахеостомия",
+      o: ["Бронхоскопия", "Трахеостомия", "Ларингэктомия"]
+    }
+  ]
+};
+
+let current = 0, score = 0;
+let currentLang = 'ru';
+
+function loadQuestion() {
+  const q = questions[currentLang][current];
+  const questionText = currentLang === 'ru' ? 'Вопрос' : currentLang === 'en' ? 'Question' : 'Сұрақ';
+  document.getElementById("question").textContent = `${questionText} ${current + 1}: ${q.q}`;
+  document.getElementById("options").innerHTML = q.o.map(opt =>
+    `<label><input type="radio" name="answer" value="${opt}"> ${opt}</label>`
+  ).join("");
+}
+
+function nextQuestion() {
+  const selected = document.querySelector('input[name="answer"]:checked');
+  if (!selected) {
+    alert(currentLang === 'ru' ? "Пожалуйста, выберите ответ." : 
+          currentLang === 'en' ? "Please select an answer." : "Жауапты таңдаңыз.");
+    return;
+  }
+  if (selected.value === questions[currentLang][current].a) score++;
+
+  current++;
+  if (current < questions[currentLang].length) {
+    loadQuestion();
+  } else {
+    const resultText = currentLang === 'ru' ? `Вы набрали ${score} из ${questions[currentLang].length} правильных ответов!` :
+                     currentLang === 'en' ? `You scored ${score} out of ${questions[currentLang].length} correct answers!` :
+                     `Сіз ${questions[currentLang].length} дұрыс жауаптың ${score} ұпайын жинадыңыз!`;
+    document.getElementById("quiz").innerHTML =
+      `<h2>${currentLang === 'ru' ? 'Результат' : currentLang === 'en' ? 'Result' : 'Нәтиже'}</h2><p class="quiz-result">${resultText}</p>`;
+  }
+}
+
+// Функция для применения языка
+function applyLanguage(lang) {
+  document.documentElement.lang = lang;
+  
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
+  });
+  
+  document.querySelectorAll('.language-btn').forEach(btn => {
+    if (btn.textContent.includes(lang === 'ru' ? 'Русский' : 
+                               lang === 'en' ? 'English' : 'Қазақша')) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  currentLang = lang;
+  updatePageTitle(lang);
+  current = 0;
+  score = 0;
+  loadQuestion();
+}
+
+// Функция для обновления title страницы
+function updatePageTitle(lang) {
+  const titles = {
+    'ru': 'Трахея — AR Education',
+    'en': 'Trachea — AR Education',
+    'kz': 'Трахея — AR Education'
+  };
+  document.title = titles[lang] || titles['ru'];
+}
+
+// Функция для изменения языка с сохранением
+function changeLanguage(lang) {
+  const loadingIndicator = document.getElementById('languageLoading');
+  loadingIndicator.style.display = 'flex';
+  
+  localStorage.setItem('selectedLanguage', lang);
+  
+  setTimeout(() => {
+    applyLanguage(lang);
+    loadingIndicator.style.display = 'none';
+  }, 100);
+}
+
+// Контрастный режим
+function toggleContrast() {
+  const isContrast = document.body.classList.toggle('contrast');
+  localStorage.setItem('contrastMode', isContrast ? 'on' : 'off');
+}
+
+// Инициализация при загрузке
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('contrastMode') === 'on') {
+    document.body.classList.add('contrast');
+  }
+  
+  const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+  applyLanguage(savedLang);
+  
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'selectedLanguage') {
+      applyLanguage(event.newValue);
+    }
+  });
+});
+</script>
+</body>
+</html>

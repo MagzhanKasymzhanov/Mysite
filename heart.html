@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Сердце — AR Education</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FFFFFF;
+      color: #5B5151;
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    header, footer {
+      background: #DFD3D3;
+      color: #5B5151;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      display: block;
+      margin: 20px auto;
+    }
+    .dia-img {
+      width: 500px;
+      height: auto;
+      border: 2px solid #888;
+      border-radius: 8px;
+      margin: 20px auto;
+      display: block;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #DFD3D3;
+      color: #5B5151;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: background 0.2s ease;
+      margin: 5px;
+    }
+    .btn:hover {
+      background: #B8B0B0;
+    }
+    .quiz-container {
+      background: #FFFFFF;
+      margin-top: 40px;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .quiz-question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .quiz-options label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .quiz-result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #5B5151;
+    }
+      
+    /* === КОНТРАСТНЫЙ РЕЖИМ === */
+    body.contrast {
+      background: #000000;
+      color: #FFFFFF;
+    }
+    body.contrast header,
+    body.contrast footer {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+    body.contrast .btn {
+      background-color: #333333;
+      color: #FFFFFF;
+      border: 1px solid #666666;
+    }
+    body.contrast .btn:hover {
+      background-color: #555555;
+    }
+    body.contrast .quiz-container {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+    body.contrast .quiz-container label,
+    body.contrast .quiz-question,
+    body.contrast .quiz-result {
+      color: #FFFFFF;
+    }
+    body.contrast input[type="radio"] {
+      accent-color: #FFFFFF;
+    }
+    
+    /* Языковой переключатель */
+    .language-switcher {
+      margin: 15px 0;
+    }
+    .language-btn {
+      padding: 8px 15px;
+      background: transparent;
+      border: 1px solid #5B5151;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: all 0.3s;
+    }
+    .language-btn.active {
+      background: #5B5151;
+      color: white;
+    }
+    body.contrast .language-btn {
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+    }
+    body.contrast .language-btn.active {
+      background: #FFFFFF;
+      color: #111111;
+    }
+    
+    /* Индикатор загрузки языка */
+    .language-loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+    }
+    body.contrast .language-loading {
+      background: rgba(0,0,0,0.7);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1 data-lang="ru">Сердце</h1>
+  <h1 data-lang="en">Heart</h1>
+  <h1 data-lang="kz">Жүрек</h1>
+  
+  <div class="lang-switcher">
+    <button class="lang-btn" onclick="switchLang('ru')">Русский</button>
+    <button class="lang-btn" onclick="switchLang('en')">English</button>
+    <button class="lang-btn" onclick="switchLang('kz')">Қазақша</button>
+  </div>
+  
+  <button class="btn" onclick="toggleContrast()">🌓 <span data-lang="ru">Контраст</span><span data-lang="en">Contrast</span><span data-lang="kz">Контраст</span></button>
+</header>
+
+<main class="content">
+  <img src="heart.png" alt="Сердце" data-lang="ru">
+  <img src="heart.png" alt="Heart" data-lang="en">
+  <img src="heart.png" alt="Жүрек" data-lang="kz">
+  
+  <h2 data-lang="ru">Что такое сердце?</h2>
+  <h2 data-lang="en">What is the heart?</h2>
+  <h2 data-lang="kz">Жүрек дегеніміз не?</h2>
+
+  <!-- Paragraph 1 -->
+  <p data-lang="ru">Сердце — это центральный орган кровеносной системы человека, работающий как мощный насос. Оно непрерывно перекачивает кровь по всему телу, обеспечивая ткани кислородом и питательными веществами.</p>
+  <p data-lang="en">The heart is the central organ of the human circulatory system, functioning as a powerful pump. It continuously pumps blood throughout the body, supplying tissues with oxygen and nutrients.</p>
+  <p data-lang="kz">Жүрек — адамның қан айналым жүйесінің орталық мүшесі, қуатты сорғы ретінде жұмыс істейді. Ол үздіксіз денеге қан айдап, ұлпаларды оттегімен және қоректік заттармен қамтамасыз етеді.</p>
+
+  <!-- Paragraph 2 -->
+  <p data-lang="ru">Сердце расположено в грудной полости, между лёгкими, немного смещено влево. Оно защищено грудной клеткой и заключено в оболочку — перикард.</p>
+  <p data-lang="en">The heart is located in the thoracic cavity, between the lungs, slightly shifted to the left. It is protected by the rib cage and enclosed in a membrane called the pericardium.</p>
+  <p data-lang="kz">Жүрек кеуде қуысында, өкпелердің арасында, солға қарай сәл ығысқан. Оны қабырға қаңқасы қорғайды және перикард деп аталатын қабықпен қоршалған.</p>
+
+  <!-- Paragraph 3 -->
+  <p data-lang="ru">Стенка сердца состоит из трёх слоёв: эпикарда (внешний), миокарда (мышечный слой) и эндокарда (внутренний). Самая мощная часть — миокард, благодаря которому сердце сокращается.</p>
+  <p data-lang="en">The heart wall consists of three layers: epicardium (outer), myocardium (muscle layer), and endocardium (inner). The most powerful part is the myocardium, which enables the heart to contract.</p>
+  <p data-lang="kz">Жүрек қабырғасы үш қабаттан тұрады: эпикард (сыртқы), миокард (бұлшықет қабаты) және эндокард (ішкі). Ең күшті бөлігі — миокард, ол жүректің жиырылуын қамтамасыз етеді.</p>
+
+  <!-- Paragraph 4 -->
+  <p data-lang="ru">Сердце человека состоит из четырёх камер: двух предсердий (правого и левого) и двух желудочков. Клапаны между ними регулируют направление тока крови.</p>
+  <p data-lang="en">The human heart consists of four chambers: two atria (right and left) and two ventricles. The valves between them regulate the direction of blood flow.</p>
+  <p data-lang="kz">Адам жүрегі төрт камерадан тұрады: екі жүрекше (оң және сол) және екі қарынша. Олардың арасындағы қақпақшалар қан ағымының бағытын реттейді.</p>
+
+  <!-- Paragraph 5 -->
+  <p data-lang="ru">Кровь циркулирует по двум кругам: большому (тело) и малому (лёгкие). Малый круг начинается в правом желудочке и заканчивается в левом предсердии. Большой круг — от левого желудочка до правого предсердия.</p>
+  <p data-lang="en">Blood circulates through two circuits: systemic (body) and pulmonary (lungs). The pulmonary circuit begins in the right ventricle and ends in the left atrium. The systemic circuit runs from the left ventricle to the right atrium.</p>
+  <p data-lang="kz">Қан екі шеңбер бойынша айналады: үлкен (денемен) және кіші (өкпе). Кіші шеңбер оң қарыншадан басталып, сол жүрекшеде аяқталады. Үлкен шеңбер сол қарыншадан оң жүрекшеге дейін.</p>
+
+  <img src="Heart_ru.svg.png" alt="Анатомия сердца" class="heart-img" data-lang="ru">
+  <img src="Heart_en.svg.png" alt="Heart anatomy" class="heart-img" data-lang="en">
+  <img src="Heart_kz.svg.png" alt="Жүрек анатомиясы" class="heart-img" data-lang="kz">
+
+  <!-- Paragraph 6 -->
+  <p data-lang="ru">Правое предсердие принимает венозную кровь из организма, а левое — артериальную кровь из лёгких. Желудочки перекачивают кровь в лёгкие и тело соответственно.</p>
+  <p data-lang="en">The right atrium receives venous blood from the body, while the left receives arterial blood from the lungs. The ventricles pump blood to the lungs and body respectively.</p>
+  <p data-lang="kz">Оң жүрекше ағзадан келген веналық қанды қабылдайды, ал сол жүрекше өкпелерден келген артериялық қанды қабылдайды. Қарыншалар сәйкесінше өкпеге және денемен қанды айдайды.</p>
+
+  <!-- Paragraph 7 -->
+  <p data-lang="ru">Сердечные клапаны — это специальные структуры, которые предотвращают обратный ток крови. В их числе: митральный, трёхстворчатый, аортальный и лёгочный клапаны.</p>
+  <p data-lang="en">Heart valves are special structures that prevent backflow of blood. These include: mitral, tricuspid, aortic, and pulmonary valves.</p>
+  <p data-lang="kz">Жүрек қақпақшалары — қанның кері ағымын болдырмайтын арнайы құрылымдар. Оларға: митральды, үш жапырақты, аорталық және өкпе қақпақшалары жатады.</p>
+
+  <!-- Paragraph 8 -->
+  <p data-lang="ru">Сердечный ритм контролируется синусовым узлом — естественным водителем ритма. Он посылает электрические импульсы, заставляющие сердце сокращаться.</p>
+  <p data-lang="en">The heart rhythm is controlled by the sinoatrial node — the natural pacemaker. It sends electrical impulses that cause the heart to contract.</p>
+  <p data-lang="kz">Жүрек ритмі синус түйіні арқылы басқарылады — бұл табиғи ритм жетекшісі. Ол жүректің жиырылуын қамтамасыз ететін электр импульстарын жібереді.</p>
+
+  <!-- Paragraph 9 -->
+  <p data-lang="ru">Сердце сокращается ритмично: систола — фаза сокращения, и диастола — фаза расслабления. В среднем сердце совершает 60–100 ударов в минуту в состоянии покоя.</p>
+  <p data-lang="en">The heart contracts rhythmically: systole is the contraction phase, and diastole is the relaxation phase. On average, the heart beats 60-100 times per minute at rest.</p>
+  <p data-lang="kz">Жүрек ритмді түрде жиырылады: систола — жиырылу фазасы, диастола — босаңсу фазасы. Орта есеппен, жүрек тыныштық күйінде минутына 60-100 рет соғады.</p>
+
+  <!-- Paragraph 10 -->
+  <p data-lang="ru">Сердце снабжается кровью через коронарные артерии. Их закупорка может привести к инфаркту — некрозу сердечной мышцы из-за кислородного голодания.</p>
+  <p data-lang="en">The heart is supplied with blood through the coronary arteries. Their blockage can lead to a heart attack — necrosis of the heart muscle due to oxygen deprivation.</p>
+  <p data-lang="kz">Жүрек қанмен коронарлы артериялар арқылы қамтамасыз етіледі. Олардың бітелуі инфарктке — жүрек бұлшықетінің оттегі тапшылығынан некрозға ұшырауына алып келуі мүмкін.</p>
+
+  <!-- Paragraph 11 -->
+  <p data-lang="ru">Физические упражнения укрепляют миокард, улучшают кровообращение и снижают риск сердечно-сосудистых заболеваний.</p>
+  <p data-lang="en">Physical exercise strengthens the myocardium, improves circulation, and reduces the risk of cardiovascular diseases.</p>
+  <p data-lang="kz">Дене шынықтыру миокардты нығайтады, қан айналымын жақсартады және жүрек-қан тамырлары ауруларының қаупін азайтады.</p>
+
+  <!-- Paragraph 12 -->
+  <p data-lang="ru">Высокий уровень холестерина, стресс, курение, гипертония и малоподвижный образ жизни — основные факторы риска для сердца.</p>
+  <p data-lang="en">High cholesterol, stress, smoking, hypertension, and a sedentary lifestyle are the main risk factors for the heart.</p>
+  <p data-lang="kz">Холестерин деңгейінің жоғарылығы, стресс, темекі шегу, гипертония және қозғалыссыз өмір салты — жүрек үшін негізгі қауіп факторлары.</p>
+
+  <!-- Paragraph 13 -->
+  <p data-lang="ru">Кардиологи рекомендуют регулярно проверять артериальное давление, уровень сахара и холестерина в крови, а также контролировать массу тела.</p>
+  <p data-lang="en">Cardiologists recommend regularly checking blood pressure, blood sugar and cholesterol levels, as well as monitoring body weight.</p>
+  <p data-lang="kz">Кардиологтар қан қысымын, қандағы қант пен холестерин деңгейін үнемі тексеруді, сонымен қатар салмақты бақылауды ұсынады.</p>
+
+  <!-- Paragraph 14 -->
+  <p data-lang="ru">Здоровое питание (овощи, фрукты, рыба, орехи) и отказ от вредных привычек способствуют сохранению здоровья сердца.</p>
+  <p data-lang="en">Healthy eating (vegetables, fruits, fish, nuts) and avoiding bad habits contribute to maintaining heart health.</p>
+  <p data-lang="kz">Дұрыс тамақтану (көкөністер, жемістер, балық, жаңғақтар) және зиянды әдеттерден бас тарту жүрек саулығын сақтауға көмектеседі.</p>
+
+  <!-- Paragraph 15 -->
+  <p data-lang="ru">Сердце — это символ жизни и любви, а также один из самых выносливых органов, работающий без перерыва от рождения до смерти.</p>
+  <p data-lang="en">The heart is a symbol of life and love, as well as one of the most resilient organs, working continuously from birth to death.</p>
+  <p data-lang="kz">Жүрек — өмір мен махаббаттың символы, сонымен қатар туылғаннан өлгенге дейін үзіліссіз жұмыс істейтін ең төзімді мүшелердің бірі.</p>
+
+  <div class="quiz-container" id="quiz">
+    <h2 data-lang="ru">🧪 Тест</h2>
+    <h2 data-lang="en">🧪 Quiz</h2>
+    <h2 data-lang="kz">🧪 Тест</h2>
+    <div class="quiz-question" id="question"></div>
+    <div class="quiz-options" id="options"></div>
+    <button class="btn" onclick="nextQuestion()" id="nextBtn" data-lang="ru">Далее</button>
+    <button class="btn" onclick="nextQuestion()" id="nextBtn" data-lang="en">Next</button>
+    <button class="btn" onclick="nextQuestion()" id="nextBtn" data-lang="kz">Келесі</button>
+    <div class="quiz-result" id="result"></div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="index.html" class="btn" data-lang="ru">← Назад к органам</a>
+    <a href="index.html" class="btn" data-lang="en">← Back to organs</a>
+    <a href="index.html" class="btn" data-lang="kz">← Мүшелерге оралу</a>
+  </div>
+</main>
+
+<footer>
+  <p data-lang="ru">&copy; 2025 AR Education</p>
+  <p data-lang="en">&copy; 2025 AR Education</p>
+  <p data-lang="kz">&copy; 2025 AR Education</p>
+</footer>
+
+<script>
+const questions = {
+  ru: [
+    {
+      q: "Где расположено сердце?",
+      a: "В грудной клетке, между лёгкими",
+      o: ["В брюшной полости", "В грудной клетке, между лёгкими", "В черепной коробке"]
+    },
+    {
+      q: "Сколько камер у сердца?",
+      a: "4",
+      o: ["2", "3", "4"]
+    },
+    {
+      q: "Какая оболочка окружает сердце?",
+      a: "Перикард",
+      o: ["Плевра", "Миокард", "Перикард"]
+    },
+    {
+      q: "Что делает левый желудочек?",
+      a: "Перекачивает кровь в большой круг",
+      o: ["Принимает кровь из лёгких", "Перекачивает кровь в лёгкие", "Перекачивает кровь в большой круг"]
+    },
+    {
+      q: "Что такое инфаркт?",
+      a: "Некроз сердечной мышцы из-за недостатка кислорода",
+      o: ["Воспаление артерий", "Увеличение печени", "Некроз сердечной мышцы из-за недостатка кислорода"]
+    }
+  ],
+  en: [
+    {
+      q: "Where is the heart located?",
+      a: "In the thoracic cavity, between the lungs",
+      o: ["In the abdominal cavity", "In the thoracic cavity, between the lungs", "In the skull"]
+    },
+    {
+      q: "How many chambers does the heart have?",
+      a: "4",
+      o: ["2", "3", "4"]
+    },
+    {
+      q: "What membrane surrounds the heart?",
+      a: "Pericardium",
+      o: ["Pleura", "Myocardium", "Pericardium"]
+    },
+    {
+      q: "What does the left ventricle do?",
+      a: "Pumps blood to the systemic circulation",
+      o: ["Receives blood from the lungs", "Pumps blood to the lungs", "Pumps blood to the systemic circulation"]
+    },
+    {
+      q: "What is a heart attack?",
+      a: "Necrosis of heart muscle due to oxygen deprivation",
+      o: ["Inflammation of arteries", "Liver enlargement", "Necrosis of heart muscle due to oxygen deprivation"]
+    }
+  ],
+  kz: [
+    {
+      q: "Жүрек қай жерде орналасқан?",
+      a: "Кеуде қуысында, өкпелердің арасында",
+      o: ["Құрсақ қуысында", "Кеуде қуысында, өкпелердің арасында", "Бассүйекте"]
+    },
+    {
+      q: "Жүректе неше камера бар?",
+      a: "4",
+      o: ["2", "3", "4"]
+    },
+    {
+      q: "Жүректі қандай қабық қоршайды?",
+      a: "Перикард",
+      o: ["Плевра", "Миокард", "Перикард"]
+    },
+    {
+      q: "Сол қарынша не істейді?",
+      a: "Қанды үлкен айналымға айдайды",
+      o: ["Өкпелерден қанды қабылдайды", "Қанды өкпеге айдайды", "Қанды үлкен айналымға айдайды"]
+    },
+    {
+      q: "Инфаркт деген не?",
+      a: "Жүрек бұлшықетінің оттегі тапшылығынан некрозға ұшырауы",
+      o: ["Артериялардың қабынуы", "Бауырдың ұлғаюы", "Жүрек бұлшықетінің оттегі тапшылығынан некрозға ұшырауы"]
+    }
+  ]
+};
+
+let currentLang = 'ru';
+let currentQuestion = 0;
+let score = 0;
+
+function switchLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.style.display = 'none';
+  });
+  document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => {
+    el.style.display = 'block';
+  });
+  loadQuestion();
+}
+
+function loadQuestion() {
+  const q = questions[currentLang][currentQuestion];
+  document.getElementById("question").textContent = `${currentLang === 'ru' ? 'Вопрос' : currentLang === 'en' ? 'Question' : 'Сұрақ'} ${currentQuestion + 1}: ${q.q}`;
+  document.getElementById("options").innerHTML = q.o.map(opt =>
+    `<label><input type="radio" name="answer" value="${opt}"> ${opt}</label>`
+  ).join("");
+  document.getElementById("result").textContent = "";
+}
+
+function nextQuestion() {
+  const selected = document.querySelector('input[name="answer"]:checked');
+  if (!selected) {
+    alert(currentLang === 'ru' ? 'Пожалуйста, выберите ответ.' : 
+          currentLang === 'en' ? 'Please select an answer.' : 'Жауапты таңдаңыз.');
+    return;
+  }
+  if (selected.value === questions[currentLang][currentQuestion].a) score++;
+
+  currentQuestion++;
+  if (currentQuestion < questions[currentLang].length) {
+    loadQuestion();
+  } else {
+    const resultText = currentLang === 'ru' ? `Вы набрали ${score} из ${questions[currentLang].length} правильных ответов!` :
+                     currentLang === 'en' ? `You scored ${score} out of ${questions[currentLang].length} correct answers!` :
+                     `Сіз ${score} дұрыс жауап бердіңіз (барлығы ${questions[currentLang].length})!`;
+    document.getElementById("quiz").innerHTML =
+      `<h2>${currentLang === 'ru' ? 'Результат' : currentLang === 'en' ? 'Result' : 'Нәтиже'}</h2><p class="quiz-result">${resultText}</p>`;
+  }
+}
+
+function toggleContrast() {
+  document.body.classList.toggle("contrast");
+}
+
+// Initialize
+switchLang('ru');
+</script>
+</body>
+</html>

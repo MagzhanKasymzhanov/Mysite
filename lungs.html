@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-lang="ru">Лёгкие — AR Education</title>
+  <title data-lang="en" style="display:none">Lungs — AR Education</title>
+  <title data-lang="kz" style="display:none">Өкпе — AR Education</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FFFFFF;
+      color: #5B5151;
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    header, footer {
+      background: #DFD3D3;
+      color: #5B5151;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    img {
+      max-width: 100%;
+      height: 200px;
+      display: block;
+      margin: 20px auto;
+    }
+    .lung-img {
+      width: 500px;
+      height: auto;
+      border: 2px solid #888;
+      border-radius: 8px;
+      margin: 20px auto;
+      display: block;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #DFD3D3;
+      color: #5B5151;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: background 0.2s ease;
+      margin: 5px;
+    }
+    .btn:hover {
+      background: #B8B0B0;
+    }
+    .quiz-container {
+      background: #FFFFFF;
+      margin-top: 40px;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .quiz-question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .quiz-options label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .quiz-result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #5B5151;
+    }
+    body.contrast {
+      background: #000000;
+      color: #FFFFFF;
+    }
+    body.contrast header,
+    body.contrast footer {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+    body.contrast .btn {
+      background-color: #333333;
+      color: #FFFFFF;
+      border: 1px solid #666666;
+    }
+    body.contrast .btn:hover {
+      background-color: #555555;
+    }
+    body.contrast .quiz-container {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+    body.contrast .quiz-container label,
+    body.contrast .quiz-question,
+    body.contrast .quiz-result {
+      color: #FFFFFF;
+    }
+    body.contrast input[type="radio"] {
+      accent-color: #FFFFFF;
+    }
+    /* Языковой переключатель */
+    .language-switcher {
+      margin: 15px 0;
+    }
+    .language-btn {
+      padding: 8px 15px;
+      background: transparent;
+      border: 1px solid #5B5151;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: all 0.3s;
+    }
+    .language-btn.active {
+      background: #5B5151;
+      color: white;
+    }
+    body.contrast .language-btn {
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+    }
+    body.contrast .language-btn.active {
+      background: #FFFFFF;
+      color: #111111;
+    }
+    /* Индикатор загрузки языка */
+    .language-loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+    }
+    body.contrast .language-loading {
+      background: rgba(0,0,0,0.7);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Индикатор загрузки языка -->
+<div class="language-loading" id="languageLoading">
+  <p data-lang="ru">Загрузка языка...</p>
+  <p data-lang="en" style="display:none">Loading language...</p>
+  <p data-lang="kz" style="display:none">Тіл жүктелуде...</p>
+</div>
+
+<header>
+  <h1 data-lang="ru">Лёгкие</h1>
+  <h1 data-lang="en" style="display:none">Lungs</h1>
+  <h1 data-lang="kz" style="display:none">Өкпе</h1>
+  
+  <div class="language-switcher">
+    <button class="language-btn active" onclick="changeLanguage('ru')">Русский</button>
+    <button class="language-btn" onclick="changeLanguage('en')">English</button>
+    <button class="language-btn" onclick="changeLanguage('kz')">Қазақша</button>
+  </div>
+  
+  <button class="btn" onclick="toggleContrast()">🌓 <span data-lang="ru">Контраст</span><span data-lang="en" style="display:none">Contrast</span><span data-lang="kz" style="display:none">Контраст</span></button>
+</header>
+
+<main class="content">
+  <img src="lungs.png" alt="Лёгкие">
+  
+  <h2 data-lang="ru">Строение лёгких</h2>
+  <h2 data-lang="en" style="display:none">Structure of the lungs</h2>
+  <h2 data-lang="kz" style="display:none">Өкпенің құрылымы</h2>
+  
+  <p data-lang="ru">Лёгкие - это парный орган дыхания, расположенный в грудной полости. Они обеспечивают газообмен между воздухом и кровью. Правое лёгкое состоит из трёх долей, а левое - из двух.</p>
+  <p data-lang="en" style="display:none">The lungs are a paired respiratory organ located in the chest cavity. They provide gas exchange between air and blood. The right lung consists of three lobes, and the left one has two lobes.</p>
+  <p data-lang="kz" style="display:none">Өкпе - кеуде қуысында орналасқан жұп тыныс алу мүшесі. Олар ауа мен қан арасында газ алмасуын қамтамасыз етеді. Оң өкпе үш бөліктен, ал сол өкпе екі бөліктен тұрады.</p>
+  
+  <img src="legkie1.jpeg" alt="Строение лёгких" class="lung-img">
+  
+  <h2 data-lang="ru">Функции лёгких</h2>
+  <h2 data-lang="en" style="display:none">Functions of the lungs</h2>
+  <h2 data-lang="kz" style="display:none">Өкпенің функциялары</h2>
+  
+  <p data-lang="ru">Основная функция лёгких - газообмен. Кислород из воздуха поступает в кровь, а углекислый газ удаляется из организма. Лёгкие также участвуют в терморегуляции и защите организма от инфекций.</p>
+  <p data-lang="en" style="display:none">The main function of the lungs is gas exchange. Oxygen from the air enters the blood, and carbon dioxide is removed from the body. The lungs are also involved in thermoregulation and protecting the body from infections.</p>
+  <p data-lang="kz" style="display:none">Өкпенің негізгі функциясы - газ алмасу. Ауадағы оттегі қанға өтеді, ал көмірқышқыл газы организмнен шығарылады. Өкпе сонымен қатар терморегуляцияға және организмді инфекциялардан қорғауға қатысады.</p>
+  
+  <h2 data-lang="ru">Процесс дыхания</h2>
+  <h2 data-lang="en" style="display:none">Breathing process</h2>
+  <h2 data-lang="kz" style="display:none">Тыныс алу процесі</h2>
+  
+  <p data-lang="ru">Дыхание осуществляется за счёт работы диафрагмы и межрёберных мышц. При вдохе грудная клетка расширяется, а при выдохе - сжимается. В альвеолах происходит обмен кислорода и углекислого газа.</p>
+  <p data-lang="en" style="display:none">Breathing is carried out by the work of the diaphragm and intercostal muscles. During inhalation, the chest expands, and during exhalation, it contracts. The exchange of oxygen and carbon dioxide occurs in the alveoli.</p>
+  <p data-lang="kz" style="display:none">Тыныс алу диафрагма мен қабырғааралық бұлшықеттердің жұмысы арқылы жүзеге асады. Тыныс жұтқанда кеуде қуысы кеңейеді, ал тыныс шығарғанда тарылады. Альвеолаларда оттегі мен көмірқышқыл газы алмасады.</p>
+  
+  <img src="legkie2.jpeg" alt="Процесс дыхания" class="lung-img">
+    <h2 data-lang="ru">Что такое лёгкие?</h2>
+<h2 data-lang="en" style="display:none">What are lungs?</h2>
+<h2 data-lang="kz" style="display:none">Өкпе деген не?</h2>
+
+<p data-lang="ru">Из чего состоит грудная клетка?</p>
+<p data-lang="en" style="display:none">What does the chest consist of?</p>
+<p data-lang="kz" style="display:none">Кеуде қуысы неден тұрады?</p>
+
+<p data-lang="ru">Грудная клетка — это действительно клетка из костей, защищающих легкие и сердце. Спереди находится грудина, продолговатая плоская кость, по бокам 12 пар ребер, сзади — грудной отдел позвоночника. Ребра соединены хрящами с грудиной и суставами с позвонками. Это позволяет им двигаться и вместе с диафрагмой растягивать легкие для вдоха и сжимать для выдоха.</p>
+<p data-lang="en" style="display:none">The chest is truly a cage of bones that protects the lungs and heart. In front is the sternum, an elongated flat bone, on the sides are 12 pairs of ribs, and in the back is the thoracic spine. The ribs are connected by cartilage to the sternum and by joints to the vertebrae. This allows them to move and, together with the diaphragm, expand the lungs for inhalation and compress them for exhalation.</p>
+<p data-lang="kz" style="display:none">Кеуде қуысы - өкпені және жүректі қорғайтын шынымен де сүйектерден тұратын қаңқа. Алдыңғы жағында ұзыншақ жалпақ сүйек - төс сүйегі, бүйірлерінде 12 жұп қабырға, артқы жағында - кеуде омыртқалары орналасқан. Қабырғалар шеміршектер арқылы төс сүйегімен және буындар арқылы омыртқалармен жалғасқан. Бұл оларға қозғалуға және диафрагмамен бірге тыныс жұтқанда өкпені кеңейтуге, тыныс шығарғанда қысуға мүмкіндік береді.</p>
+
+<img src="legkie3.jpeg" alt="Анатомия лёгких" class="lung-img" data-lang="ru">
+
+
+<p data-lang="ru">Двигают ребра мышцы, расположенные между ними, а также снаружи и внутри грудной клетки.</p>
+<p data-lang="en" style="display:none">The ribs are moved by muscles located between them, as well as outside and inside the chest.</p>
+<p data-lang="kz" style="display:none">Қабырғаларды олардың арасында, сондай-ақ кеуде қуысының сыртында және ішінде орналасқан бұлшықеттер қозғайды.</p>
+
+<p data-lang="ru">Над грудной клеткой у нас шея, а под ней — диафрагма, крупная мышца, куполом покрывающая лежащую ниже брюшную полость.</p>
+<p data-lang="en" style="display:none">Above the chest is the neck, and below it is the diaphragm, a large muscle that domes over the abdominal cavity below.</p>
+<p data-lang="kz" style="display:none">Кеуде қуысының үстінде мойынымыз, ал астында - қуыс қуысын құмғақтайтын үлкен бұлшықет - диафрагма орналасқан.</p>
+
+<p data-lang="ru">Середина грудной клетки называется средостение. Тут находится сердце, проходят пищевод, крупные сосуды и нервы. Пространство слева и справа от них занимают легкие, левое и правое.</p>
+<p data-lang="en" style="display:none">The middle of the chest is called the mediastinum. Here is the heart, the esophagus, large vessels and nerves pass through. The space to the left and right of them is occupied by the lungs, left and right.</p>
+<p data-lang="kz" style="display:none">Кеуде қуысының ортасы ортаңғы кеуде деп аталады. Мұнда жүрек, өңеш, ірі қан тамырлары мен жүйкелер өтеді. Олардың сол және оң жағындағы кеңістікті сол және оң өкпелер алады.</p>
+
+<p data-lang="ru">Как устроены легкие?</p>
+<p data-lang="en" style="display:none">How are the lungs structured?</p>
+<p data-lang="kz" style="display:none">Өкпе қалай құрылған?</p>
+
+<p data-lang="ru">Правое легкое несколько больше левого, в нем 3 доли — верхняя, средняя и нижняя. В левом легком только верхняя и нижняя.</p>
+<p data-lang="en" style="display:none">The right lung is slightly larger than the left, it has 3 lobes - upper, middle and lower. The left lung has only upper and lower lobes.</p>
+<p data-lang="kz" style="display:none">Оң өкпе сол өкпеге қарағанда сәл үлкен, онда 3 бөлік бар - жоғарғы, ортаңғы және төменгі. Сол өкпеде тек жоғарғы және төменгі бөліктер бар.</p>
+
+<img src="legkie4.jpeg" alt="Анатомия лёгких" class="lung-img" data-lang="ru">
+
+
+<p data-lang="ru">Каждая доля состоит из сегментов, и сегментов в правом и левом легком поровну, по 10 в каждом. В определенных случаях в ходе операции удаляют только пораженный сегмент и сохраняют здоровую ткань легкого.</p>
+<p data-lang="en" style="display:none">Each lobe consists of segments, and there are an equal number of segments in the right and left lungs, 10 in each. In certain cases, during surgery, only the affected segment is removed and healthy lung tissue is preserved.</p>
+<p data-lang="kz" style="display:none">Әрбір бөлік сегменттерден тұрады, ал оң және сол өкпеде сегменттер саны бірдей, әрқайсысында 10-нан. Кейбір жағдайларда операция кезінде тек зақымдалған сегмент алынып, өкпенің сау тіні сақталады.</p>
+
+<p data-lang="ru">Дыхательное горло (трахея) делится на два воздухоносных пути (бронха) и к каждому легкому подходит один главный бронх. Каждый из них в своем легком делится на долевые и сегментарные бронхи, а дальше на более мелкие и, наконец, на бронхиолы. У взрослого человека от 10 до 30 разветвлений от трахеи до бронхиол.</p>
+<p data-lang="en" style="display:none">The windpipe (trachea) divides into two airways (bronchi) and one main bronchus approaches each lung. Each of them in its lung is divided into lobar and segmental bronchi, and then into smaller ones and, finally, into bronchioles. An adult has from 10 to 30 branches from the trachea to the bronchioles.</p>
+<p data-lang="kz" style="display:none">Тыныс алу жолы (трахея) екі ауа жолына (бронхтарға) бөлінеді және әрбір өкпеге бір негізгі бронх барады. Әрқайсысы өз өкпесінде бөліктерге және сегменттік бронхтарға бөлінеді, содан кейін кішіректерге және, ақырында, бронхиолаларға бөлінеді. Ересек адамда трахеядан бронхиолаларға дейін 10-нан 30-ға дейін тармақтар бар.</p>
+
+<p data-lang="ru">Конечная структура в легком — альвеолы. Каждая из бронхиол заканчивается гроздью пузырьков, альвеол, окруженных сетью кровеносных сосудов. В стенках альвеол есть клетки, обеспечивающие газообмен — проведение кислорода из воздуха в кровь и выведение углекислого газа в выдыхаемый воздух. А также клетки, производящие специальную жидкость с низким коэффициентом поверхностного натяжения, которая не позволяет альвеолам спадаться во время выдоха.</p>
+<p data-lang="en" style="display:none">The final structure in the lung is the alveoli. Each bronchiole ends in a cluster of bubbles, alveoli, surrounded by a network of blood vessels. The walls of the alveoli contain cells that ensure gas exchange - the transfer of oxygen from the air into the blood and the removal of carbon dioxide into the exhaled air. As well as cells that produce a special fluid with a low surface tension coefficient that prevents the alveoli from collapsing during exhalation.</p>
+<p data-lang="kz" style="display:none">Өкпедегі соңғы құрылым - альвеолалар. Әрбір бронхиола қан тамырлары желісімен қоршалған көпіршіктер шоғырымен, альвеолалармен аяқталады. Альвеолалардың қабырғаларында газ алмасуын қамтамасыз ететін клеткалар бар - ауадағы оттегіні қанға өткізу және көмірқышқыл газын шығарылатын ауаға шығару. Сондай-ақ, тыныс шығарған кезде альвеолалардың құлауына жол бермейтін төмен беттік керілу коэффициенті бар арнайы сұйықтық өндіретін клеткалар бар.</p>
+
+<img src="le" alt="Анатомия лёгких" class="lung-img" data-lang="ru">
+
+
+<p data-lang="ru">Поверхность легких снаружи и грудной клетки изнутри покрыта тонкой пленкой плевральной оболочки. Плевра позволяет легким скользить при дыхании, так как листки ее очень гладкие, а между ними, в плевральной полости, находится небольшое количество плевральной жидкости.</p>
+<p data-lang="en" style="display:none">The surface of the lungs on the outside and the chest on the inside are covered with a thin film of the pleural membrane. The pleura allows the lungs to slide during breathing, since its layers are very smooth, and between them, in the pleural cavity, there is a small amount of pleural fluid.</p>
+<p data-lang="kz" style="display:none">Өкпенің сыртқы беті және кеуде қуысының ішкі жағы плевра қабығының жұқа қабатымен қапталған. Плевра өкпеге тыныс алу кезінде сырғанауға мүмкіндік береді, өйткені оның қабаттары өте тегіс, ал олардың арасында, плевра қуысында, аз мөлшерде плевра сұйықтығы болады.</p>
+
+<p data-lang="ru">На каждом легком выделяют наружную (реберную), внутреннюю (средостенную) и нижнюю (диафрагмальную) поверхности. Со стороны средостенной поверхности через ворота в легкие попадают главные бронхи, кровеносные и лимфатические сосуды, нервы.</p>
+<p data-lang="en" style="display:none">On each lung, the outer (costal), inner (mediastinal) and lower (diaphragmatic) surfaces are distinguished. From the mediastinal surface, through the hilum, the main bronchi, blood and lymphatic vessels, and nerves enter the lungs.</p>
+<p data-lang="kz" style="display:none">Әрбір өкпеде сыртқы (қабырғалық), ішкі (ортаңғы кеуделік) және төменгі (диафрагмалық) беттер бөлінеді. Ортаңғы кеуделік бет жағынан негізгі бронхтар, қан және лимфа тамырлары, жүйкелер өкпеге енеді.</p>
+
+<p data-lang="ru">Какие лимфоузлы связаны с легкими?</p>
+<p data-lang="en" style="display:none">Which lymph nodes are associated with the lungs?</p>
+<p data-lang="kz" style="display:none">Өкпеге қандай лимфа түйіндері байланысты?</p>
+
+<p data-lang="ru">Лимфатические узлы (лимфоузлы) представляют собой маленькие бобовидные органы. Они «фильтруют» лимфу, задерживают инородные частицы — болезнетворные микроорганизмы и переродившиеся собственные клетки, и борются с ними. Лимфоузлы располагаются по ходу сосудов по всему организму.</p>
+<p data-lang="en" style="display:none">Lymph nodes are small bean-shaped organs. They "filter" lymph, trap foreign particles - pathogenic microorganisms and degenerated own cells, and fight them. Lymph nodes are located along the vessels throughout the body.</p>
+<p data-lang="kz" style="display:none">Лимфа түйіндері - кішкене астық тәрізді мүшелер. Олар лимфаны "сүзеді", бөгде бөлшектерді - ауру тудыратын микроорганизмдер мен өзгерген өз клеткаларын ұстап, олармен күреседі. Лимфа түйіндері бүкіл организм бойынша тамырлар бойымен орналасқан.</p>
+
+<p data-lang="ru">Лимфоузлы, связанные с легкими, располагаются преимущественно в средостении. В зависимости от расположения различают надключичные, средостенные и корневые лимфоузлы.</p>
+<p data-lang="en" style="display:none">Lymph nodes associated with the lungs are located mainly in the mediastinum. Depending on the location, supraclavicular, mediastinal and root lymph nodes are distinguished.</p>
+<p data-lang="kz" style="display:none">Өкпеге байланысты лимфа түйіндері негізінен ортаңғы кеудеде орналасқан. Орналасуына байланысті білік үсті, ортаңғы кеуделік және түбірлік лимфа түйіндері бөлінеді.</p>
+    <p data-lang="ru">При раке легкого опухолевые клетки по лимфатическим сосудам могут попасть в лимфатические узлы. Поражение лимфатических узлов учитывают для определения стадии заболевания и прогноза.</p>
+<p data-lang="en" style="display:none">In lung cancer, tumor cells can enter the lymph nodes through the lymphatic vessels. Lymph node involvement is taken into account to determine the stage of the disease and prognosis.</p>
+<p data-lang="kz" style="display:none">Өкпе қатерлі ісігінде ісік клеткалары лимфа тамырлары арқылы лимфа түйіндеріне өте алады. Лимфа түйіндерінің зақымдануы аурудың кезеңін және болжамды анықтау үшін ескеріледі.</p>
+
+<p data-lang="ru">Какие функции выполняют легкие?</p>
+<p data-lang="en" style="display:none">What functions do the lungs perform?</p>
+<p data-lang="kz" style="display:none">Өкпе қандай функцияларды атқарады?</p>
+
+<p data-lang="ru">В легких происходит газообмен между воздухом и кровью: кислород поступает из воздуха в кровь, а из крови в воздух выделяется углекислый газ. Затем воздух, потерявший часть кислорода и более насыщенный углекислым газом, выдыхается.</p>
+<p data-lang="en" style="display:none">Gas exchange occurs in the lungs between air and blood: oxygen passes from the air into the blood, and carbon dioxide is released from the blood into the air. Then the air, which has lost some oxygen and is more saturated with carbon dioxide, is exhaled.</p>
+<p data-lang="kz" style="display:none">Өкпеде ауа мен қан арасында газ алмасу жүреді: оттегі ауадан қанға өтеді, ал қаннан ауаға көмірқышқыл газы бөлінеді. Содан кейін оттегінің бір бөлігін жоғалтқан және көмірқышқыл газына қаныққан ауа сыртқа шығарылады.</p>
+
+<p data-lang="ru">Кроме того, легкие выполняют защитную функцию. Бронхиальная слизь способствует выведению пылевых частиц, микроорганизмов и вирусов. Благодаря механорецепторам глотки, гортани, трахеи и бронхов возникает кашель и приводит к механическому удалению посторонних частиц из дыхательных путей.</p>
+<p data-lang="en" style="display:none">In addition, the lungs perform a protective function. Bronchial mucus helps remove dust particles, microorganisms and viruses. Thanks to the mechanoreceptors of the pharynx, larynx, trachea and bronchi, coughing occurs and leads to the mechanical removal of foreign particles from the respiratory tract.</p>
+<p data-lang="kz" style="display:none">Сонымен қатар, өкпе қорғаныс функциясын атқарады. Бронхтардың шырышы тозаң бөлшектерін, микроорганизмдер мен вирустарды шығаруға көмектеседі. Жұтқыншақ, көмей, трахея және бронхтардың механорецепторларының арқасында жөтел пайда болады және тыныс жолдарынан бөгде бөлшектерді механикалық түрде жоюға әкеледі.</p>
+
+<p data-lang="ru">Легкие принимают участие также в водно-солевом обмене. Вместе с дыханием за сутки выделяется около 500 мл воды.</p>
+<p data-lang="en" style="display:none">The lungs are also involved in water-salt metabolism. About 500 ml of water is released per day through breathing.</p>
+<p data-lang="kz" style="display:none">Өкпе су-тұз алмасуына да қатысады. Тыныс алу арқылы күніне шамамен 500 мл су бөлінеді.</p>
+
+<p data-lang="ru">Как работают легкие?</p>
+<p data-lang="en" style="display:none">How do the lungs work?</p>
+<p data-lang="kz" style="display:none">Өкпе қалай жұмыс істейді?</p>
+
+<img src="legkie4.jpeg" alt="Анатомия лёгких" class="lung-img" data-lang="ru">
+<img src="legkie4.jpeg" alt="Lung anatomy" class="lung-img" data-lang="en" style="display:none">
+<img src="legkie4.jpeg" alt="Өкпе анатомиясы" class="lung-img" data-lang="kz" style="display:none">
+<p data-lang="ru">Во время вдоха диафрагма (большая мышца, разделяющая грудную клетку и брюшную полость) и межреберные мышцы сокращаются. Грудная клетка расширяется и растягивает легкие. Из-за увеличения их объема давление в легких снижается, и воздух через дыхательные пути затягивается внутрь. Таким образом воздух поступает через трахею и бронхи в альвеолы. Мембрана альвеол и стенки сосудов плотно прилежат друг к другу и формируют тонкий воздушно-кровяной барьер. Через него молекулы газов проникают из воздуха в кровь, а из крови выделяются в воздух. Кровь насыщается кислородом, а углекислый газ выводится из организма.</p>
+<p data-lang="en" style="display:none">During inhalation, the diaphragm (a large muscle separating the chest and abdominal cavity) and intercostal muscles contract. The chest expands and stretches the lungs. Due to the increase in their volume, the pressure in the lungs decreases, and air is drawn inward through the respiratory tract. Thus, air enters through the trachea and bronchi into the alveoli. The membrane of the alveoli and the walls of the vessels are tightly adjacent to each other and form a thin air-blood barrier. Through it, gas molecules penetrate from the air into the blood, and are released from the blood into the air. The blood is saturated with oxygen, and carbon dioxide is removed from the body.</p>
+<p data-lang="kz" style="display:none">Тыныс жұтқанда диафрагма (кеуде қуысы мен құрсақ қуысын бөлетін үлкен бұлшықет) және қабырғааралық бұлшықеттер жиырылады. Кеуде қуысы кеңейіп, өкпені созады. Олардың көлемінің артуына байланысты өкпедегі қысым төмендейді және ауа тыныс жолдары арқылы ішке тартылады. Осылайша ауа трахея және бронхтар арқылы альвеолаларға өтеді. Альвеолалардың мембранасы мен қан тамырларының қабырғалары бір-біріне тығыз жабысып, жұқа ауа-қан тосқауылын құрайды. Ол арқылы газ молекулалары ауадан қанға өтеді, ал қаннан ауаға бөлінеді. Қан оттегімен қанығады, ал көмірқышқыл газы организмнен шығарылады.</p>
+
+<p data-lang="ru">Во время выдоха мышцы расслабляются. Легкие, благодаря эластичности, сжимаются, уменьшаются в объеме. Воздух, богатый углекислым газом, по дыхательным путям выталкивается наружу.</p>
+<p data-lang="en" style="display:none">During exhalation, the muscles relax. The lungs, due to their elasticity, compress and decrease in volume. Air rich in carbon dioxide is pushed out through the respiratory tract.</p>
+<p data-lang="kz" style="display:none">Тыныс шығарғанда бұлшықеттер босаңсайды. Өкпе серпімділігінің арқасында қысылып, көлемі кішірейеді. Көмірқышқыл газына бай ауа тыныс жолдары арқылы сыртқа шығарылады.</p>
+
+
+  <div class="quiz-container" id="quiz">
+    <h2 data-lang="ru">🧪 Тест</h2>
+    <h2 data-lang="en" style="display:none">🧪 Quiz</h2>
+    <h2 data-lang="kz" style="display:none">🧪 Тест</h2>
+    <div class="quiz-question" id="question"></div>
+    <div class="quiz-options" id="options"></div>
+    <button class="btn" onclick="nextQuestion()" id="nextBtn">
+      <span data-lang="ru">Далее</span>
+      <span data-lang="en" style="display:none">Next</span>
+      <span data-lang="kz" style="display:none">Әрі қарай</span>
+    </button>
+    <div class="quiz-result" id="result"></div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="index.html" class="btn">
+      <span data-lang="ru">← Назад к органам</span>
+      <span data-lang="en" style="display:none">← Back to organs</span>
+      <span data-lang="kz" style="display:none">← Мүшелерге оралу</span>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 AR Education</p>
+</footer>
+
+<script>
+// Вопросы для теста на разных языках
+const questions = {
+  ru: [
+    {
+      q: "Какова основная функция лёгких?",
+      a: "Газообмен между воздухом и кровью",
+      o: ["Производство гормонов", "Газообмен между воздухом и кровью", "Переваривание пищи"]
+    },
+    {
+      q: "Где происходит обмен кислорода и углекислого газа?",
+      a: "В альвеолах",
+      o: ["В бронхах", "В трахее", "В альвеолах"]
+    },
+    {
+      q: "Что покрывает лёгкие и защищает их?",
+      a: "Грудная клетка",
+      o: ["Желудок", "Кожа", "Грудная клетка"]
+    },
+    {
+      q: "Что делает диафрагма при вдохе?",
+      a: "Опускается и втягивает воздух",
+      o: ["Сжимает желудок", "Опускается и втягивает воздух", "Поднимается и выталкивает воздух"]
+    },
+    {
+      q: "Какой вредный фактор негативно влияет на лёгкие?",
+      a: "Курение",
+      o: ["Зарядка", "Курение", "Плавание"]
+    }
+  ],
+  en: [
+    {
+      q: "What is the main function of the lungs?",
+      a: "Gas exchange between air and blood",
+      o: ["Hormone production", "Gas exchange between air and blood", "Food digestion"]
+    },
+    {
+      q: "Where does the exchange of oxygen and carbon dioxide occur?",
+      a: "In the alveoli",
+      o: ["In the bronchi", "In the trachea", "In the alveoli"]
+    },
+    {
+      q: "What covers and protects the lungs?",
+      a: "The rib cage",
+      o: ["The stomach", "The skin", "The rib cage"]
+    },
+    {
+      q: "What does the diaphragm do when inhaling?",
+      a: "Descends and draws in air",
+      o: ["Compresses the stomach", "Descends and draws in air", "Rises and pushes out air"]
+    },
+    {
+      q: "What harmful factor negatively affects the lungs?",
+      a: "Smoking",
+      o: ["Exercise", "Smoking", "Swimming"]
+    }
+  ],
+  kz: [
+    {
+      q: "Өкпенің негізгі функциясы қандай?",
+      a: "Ауа мен қан арасында газ алмасу",
+      o: ["Гормондар өндіру", "Ауа мен қан арасында газ алмасу", "Тамақ қорыту"]
+    },
+    {
+      q: "Оттегі мен көмірқышқыл газы қай жерде алмасады?",
+      a: "Альвеолаларда",
+      o: ["Бронхтарда", "Трахеяда", "Альвеолаларда"]
+    },
+    {
+      q: "Өкпені қандай қоршап, қорғайды?",
+      a: "Кеуде қуысы",
+      o: ["Асқазан", "Тері", "Кеуде қуысы"]
+    },
+    {
+      q: "Тыныс жұтқанда диафрагма не істейді?",
+      a: "Төмен түсіп, ауаны тартады",
+      o: ["Асқазанды қысады", "Төмен түсіп, ауаны тартады", "Көтеріліп, ауаны шығарады"]
+    },
+    {
+      q: "Өкпеге қандай зиянды фактор теріс әсер етеді?",
+      a: "Шылым шегу",
+      o: ["Жаттығу", "Шылым шегу", "Жүзу"]
+    }
+  ]
+};
+
+let current = 0, score = 0;
+let currentLang = 'ru';
+
+function loadQuestion() {
+  const q = questions[currentLang][current];
+  const questionText = currentLang === 'ru' ? 'Вопрос' : currentLang === 'en' ? 'Question' : 'Сұрақ';
+  document.getElementById("question").textContent = `${questionText} ${current + 1}: ${q.q}`;
+  document.getElementById("options").innerHTML = q.o.map(opt =>
+    `<label><input type="radio" name="answer" value="${opt}"> ${opt}</label>`
+  ).join("");
+}
+
+function nextQuestion() {
+  const selected = document.querySelector('input[name="answer"]:checked');
+  if (!selected) {
+    alert(currentLang === 'ru' ? "Пожалуйста, выберите ответ." : 
+          currentLang === 'en' ? "Please select an answer." : "Жауапты таңдаңыз.");
+    return;
+  }
+  if (selected.value === questions[currentLang][current].a) score++;
+
+  current++;
+  if (current < questions[currentLang].length) {
+    loadQuestion();
+  } else {
+    const resultText = currentLang === 'ru' ? `Вы набрали ${score} из ${questions[currentLang].length} правильных ответов!` :
+                     currentLang === 'en' ? `You scored ${score} out of ${questions[currentLang].length} correct answers!` :
+                     `Сіз ${questions[currentLang].length} дұрыс жауаптың ${score} ұпайын жинадыңыз!`;
+    document.getElementById("quiz").innerHTML =
+      `<h2>${currentLang === 'ru' ? 'Результат' : currentLang === 'en' ? 'Result' : 'Нәтиже'}</h2><p class="quiz-result">${resultText}</p>`;
+  }
+}
+
+// Функция для применения языка
+function applyLanguage(lang) {
+  document.documentElement.lang = lang;
+  
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
+  });
+  
+  document.querySelectorAll('.language-btn').forEach(btn => {
+    if (btn.textContent.includes(lang === 'ru' ? 'Русский' : 
+                               lang === 'en' ? 'English' : 'Қазақша')) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  currentLang = lang;
+  updatePageTitle(lang);
+  current = 0;
+  score = 0;
+  loadQuestion();
+}
+
+// Функция для обновления title страницы
+function updatePageTitle(lang) {
+  const titles = {
+    'ru': 'Лёгкие — AR Education',
+    'en': 'Lungs — AR Education',
+    'kz': 'Өкпе — AR Education'
+  };
+  document.title = titles[lang] || titles['ru'];
+}
+
+// Функция для изменения языка с сохранением
+function changeLanguage(lang) {
+  const loadingIndicator = document.getElementById('languageLoading');
+  loadingIndicator.style.display = 'flex';
+  
+  localStorage.setItem('selectedLanguage', lang);
+  
+  setTimeout(() => {
+    applyLanguage(lang);
+    loadingIndicator.style.display = 'none';
+  }, 100);
+}
+
+// Контрастный режим
+function toggleContrast() {
+  const isContrast = document.body.classList.toggle('contrast');
+  localStorage.setItem('contrastMode', isContrast ? 'on' : 'off');
+}
+
+// Инициализация при загрузке
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('contrastMode') === 'on') {
+    document.body.classList.add('contrast');
+  }
+  
+  const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+  applyLanguage(savedLang);
+  
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'selectedLanguage') {
+      applyLanguage(event.newValue);
+    }
+  });
+});
+</script>
+</body>
+</html>

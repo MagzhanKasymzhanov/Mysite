@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title data-lang="ru">Нейроны — AR Education</title>
+  <title data-lang="en" style="display:none">Neurons — AR Education</title>
+  <title data-lang="kz" style="display:none">Нейрондар — AR Education</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FFFFFF;
+      color: #5B5151;
+      margin: 0;
+      padding: 0;
+      font-size: 18px;
+    }
+    header, footer {
+      background: #DFD3D3;
+      color: #5B5151;
+      padding: 15px 20px;
+      text-align: center;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    img {
+      max-width: 100%;
+      height: 200px;
+      object-fit: contain;
+      display: block;
+      margin: 20px auto;
+    }
+    .neuron-img {
+      width: 500px;
+      height: 500px;
+      border: 2px solid #888;
+      border-radius: 8px;
+      margin: 20px auto;
+      display: block;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background: #DFD3D3;
+      color: #5B5151;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: background 0.2s ease;
+      margin: 5px;
+    }
+    .btn:hover {
+      background: #B8B0B0;
+    }
+    .quiz-container {
+      background: #FFFFFF;
+      margin-top: 40px;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .quiz-question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .quiz-options label {
+      display: block;
+      margin: 5px 0;
+      cursor: pointer;
+    }
+    .quiz-result {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 20px;
+      color: #5B5151;
+    }
+      
+    body.contrast {
+      background: #000000;
+      color: #FFFFFF;
+    }
+
+    body.contrast header,
+    body.contrast footer {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+
+    body.contrast .btn {
+      background-color: #333333;
+      color: #FFFFFF;
+      border: 1px solid #666666;
+    }
+
+    body.contrast .btn:hover {
+      background-color: #555555;
+    }
+
+    body.contrast .quiz-container {
+      background: #1A1A1A;
+      color: #FFFFFF;
+    }
+
+    body.contrast .quiz-container label,
+    body.contrast .quiz-question,
+    body.contrast .quiz-result {
+      color: #FFFFFF;
+    }
+
+    body.contrast input[type="radio"] {
+      accent-color: #FFFFFF;
+    }
+
+    /* Языковой переключатель */
+    .language-switcher {
+      margin: 15px 0;
+    }
+
+    .language-btn {
+      padding: 8px 15px;
+      background: transparent;
+      border: 1px solid #5B5151;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 0 5px;
+      transition: all 0.3s;
+    }
+
+    .language-btn.active {
+      background: #5B5151;
+      color: white;
+    }
+
+    body.contrast .language-btn {
+      border-color: #FFFFFF;
+      color: #FFFFFF;
+    }
+
+    body.contrast .language-btn.active {
+      background: #FFFFFF;
+      color: #111111;
+    }
+
+    /* Индикатор загрузки языка */
+    .language-loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255,255,255,0.7);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+    }
+
+    body.contrast .language-loading {
+      background: rgba(0,0,0,0.7);
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Индикатор загрузки языка -->
+<div class="language-loading" id="languageLoading">
+  <p data-lang="ru">Загрузка языка...</p>
+  <p data-lang="en" style="display:none">Loading language...</p>
+  <p data-lang="kz" style="display:none">Тіл жүктелуде...</p>
+</div>
+
+<header>
+  <h1 data-lang="ru">Нейроны</h1>
+  <h1 data-lang="en" style="display:none">Neurons</h1>
+  <h1 data-lang="kz" style="display:none">Нейрондар</h1>
+  
+  <div class="language-switcher">
+    <button class="language-btn active" onclick="changeLanguage('ru')">Русский</button>
+    <button class="language-btn" onclick="changeLanguage('en')">English</button>
+    <button class="language-btn" onclick="changeLanguage('kz')">Қазақша</button>
+  </div>
+  
+  <button class="btn" onclick="toggleContrast()">🌓 <span data-lang="ru">Контраст</span><span data-lang="en" style="display:none">Contrast</span><span data-lang="kz" style="display:none">Контраст</span></button>
+</header>
+
+<main class="content">
+  <img src="neuron.png" alt="Нейроны">
+  
+  <h2 data-lang="ru">Что такое нейроны?</h2>
+  <h2 data-lang="en" style="display:none">What are neurons?</h2>
+  <h2 data-lang="kz" style="display:none">Нейрон деген не?</h2>
+  
+  <p data-lang="ru">🧬 Нейроны — это специализированные клетки, составляющие основу нервной системы. Они передают, принимают и обрабатывают информацию с помощью электрических и химических сигналов. Нейроны обеспечивают работу мозга, спинного мозга и периферических нервов.</p>
+  <p data-lang="en" style="display:none">🧬 Neurons are specialized cells that form the basis of the nervous system. They transmit, receive and process information using electrical and chemical signals. Neurons ensure the functioning of the brain, spinal cord and peripheral nerves.</p>
+  <p data-lang="kz" style="display:none">🧬 Нейрондар - жүйке жүйесінің негізін құрайтын мамандандырылған жасушалар. Олар электрлік және химиялық сигналдар арқылы ақпаратты жеткізеді, қабылдайды және өңдейді. Нейрондар мидың, жұлынның және перифериялық жүйкелердің жұмысын қамтамасыз етеді.</p>
+  
+  <p data-lang="ru">⚡ Каждый нейрон состоит из трех основных частей: дендритов (принимают сигналы), тела клетки (обрабатывает информацию) и аксона (передаёт сигнал дальше). Конец аксона соединяется с другими нейронами или клетками тела в синапсах.</p>
+  <p data-lang="en" style="display:none">⚡ Each neuron consists of three main parts: dendrites (receive signals), cell body (processes information) and axon (transmits the signal further). The end of the axon connects with other neurons or body cells at synapses.</p>
+  <p data-lang="kz" style="display:none">⚡ Әрбір нейрон үш негізгі бөліктен тұрады: дендриттер (сигналдарды қабылдайды), жасуша денесі (ақпаратты өңдейді) және аксон (сигналды әрі жеткізеді). Аксонның ұшы басқа нейрондармен немесе дененің жасушаларымен синапстарда жалғанады.</p>
+  
+  <img src="neuro1.jpeg" alt="Нейрон" class="neuron-img">
+  
+  <p data-lang="ru">Строение центральной нервной системы</p>
+  <p data-lang="en" style="display:none">Structure of the central nervous system</p>
+  <p data-lang="kz" style="display:none">Орталық жүйке жүйесінің құрылымы</p>
+  
+  <p data-lang="ru">Центральная нервная система (ЦНС) — центр обработки информации в организме. Она состоит из головного и спинного мозга. Мозг контролирует большинство функций, включая сознание, движение, мышление, речь и 5 органов чувств: зрение, слух, тактильные ощущения, вкус и обоняние.</p>
+  <p data-lang="en" style="display:none">The central nervous system (CNS) is the information processing center in the body. It consists of the brain and spinal cord. The brain controls most functions, including consciousness, movement, thinking, speech and 5 senses: vision, hearing, touch, taste and smell.</p>
+  <p data-lang="kz" style="display:none">Орталық жүйке жүйесі (ОЖЖ) - ағзадағы ақпаратты өңдеу орталығы. Ол ми мен жұлыннан тұрады. Ми сананы, қозғалысты, ойлауды, сөйлеуді және 5 сезім мүшесін: көру, есту, жанасу, дәм және иіс сезімін басқарады.</p>
+  
+  <p data-lang="ru">Спинной мозг — продолжение головного мозга. Он передает сообщения в головной мозг и сигналы от него через сеть периферических нервов.</p>
+  <p data-lang="en" style="display:none">The spinal cord is an extension of the brain. It transmits messages to the brain and signals from it through a network of peripheral nerves.</p>
+  <p data-lang="kz" style="display:none">Жұлын - мидың жалғасы. Ол миға хабарларды және одан сигналдарды перифериялық жүйкелер желісі арқылы жеткізеді.</p>
+  
+  <p data-lang="ru">Каждая из структур головного и спинного мозга состоит из разных тканей и клеток. Существуют две большие группы клеток — нейроны и глия.</p>
+  <p data-lang="en" style="display:none">Each of the structures of the brain and spinal cord consists of different tissues and cells. There are two large groups of cells - neurons and glia.</p>
+  <p data-lang="kz" style="display:none">Ми мен жұлынның әрбір құрылымы әртүрлі тіндер мен жасушалардан тұрады. Екі ірі жасуша тобы бар - нейрондар және глия.</p>
+  
+  <p data-lang="ru">Нейроны</p>
+  <p data-lang="en" style="display:none">Neurons</p>
+  <p data-lang="kz" style="display:none">Нейрондар</p>
+  
+  <p data-lang="ru">Нервная клетка (нейрон) состоит из:</p>
+  <p data-lang="en" style="display:none">A nerve cell (neuron) consists of:</p>
+  <p data-lang="kz" style="display:none">Жүйке жасушасы (нейрон) мыналардан тұрады:</p>
+  
+  <p data-lang="ru">тела клетки, где находится ядро с генетической информацией и органоиды (структуры, осуществляющие обмен веществ), поддерживающие жизнедеятельность клетки;</p>
+  <p data-lang="en" style="display:none">cell body containing the nucleus with genetic information and organelles (structures that carry out metabolism) that support the cell's vital activity;</p>
+  <p data-lang="kz" style="display:none">жасуша денесі, онда генетикалық ақпараты бар ядро және жасушаның тіршілігін қолдайтын органоидтар (зат алмасу процестерін жүзеге асыратын құрылымдар) орналасқан;</p>
+  
+  <p data-lang="ru">дендритов — коротких разветвленных отростков, обеспечивающих обмен сигналами с другими нейронами;</p>
+  <p data-lang="en" style="display:none">dendrites - short branched processes that provide signal exchange with other neurons;</p>
+  <p data-lang="kz" style="display:none">дендриттер - басқа нейрондармен сигнал алмасуын қамтамасыз ететін қысқа бұтақталған өсінділер;</p>
+  
+  <p data-lang="ru">аксона — длинного отростка, покрытого миелиновой оболочкой, проводящего нервный импульс от тела нейрона к другому нейрону или органу;</p>
+  <p data-lang="en" style="display:none">axon - a long process covered with a myelin sheath that conducts a nerve impulse from the body of the neuron to another neuron or organ;</p>
+  <p data-lang="kz" style="display:none">аксон - миелин қабығымен қапталған ұзын өсінді, нейрон денесінен басқа нейронға немесе мүшеге жүйке импульсін өткізеді;</p>
+  
+  <p data-lang="ru">терминалей аксона — концевых разветвлений, обеспечивающих связь с другими клетками — нервными, мышечными, железистыми.</p>
+  <p data-lang="en" style="display:none">axon terminals - terminal branches that provide communication with other cells - nerve, muscle, glandular.</p>
+  <p data-lang="kz" style="display:none">аксон терминалдары - басқа жасушалармен (жүйкелік, бұлшықеттік, бездік) байланысты қамтамасыз ететін соңғы бұтақтар.</p>
+  
+  <p data-lang="ru">Глия</p>
+  <p data-lang="en" style="display:none">Glia</p>
+  <p data-lang="kz" style="display:none">Глия</p>
+  
+  <p data-lang="ru">Глиальные клетки или глия — вспомогательные клетки нервной ткани, обеспечивающие защитную и иммунную функции.</p>
+  <p data-lang="en" style="display:none">Glial cells or glia are auxiliary cells of nervous tissue that provide protective and immune functions.</p>
+  <p data-lang="kz" style="display:none">Глиялық жасушалар немесе глия - жүйке тінінің қорғаныс және иммундық функцияларды қамтамасыз ететін көмекші жасушалары.</p>
+  
+  <p data-lang="ru">Глия состоит из:</p>
+  <p data-lang="en" style="display:none">Glia consists of:</p>
+  <p data-lang="kz" style="display:none">Глия мыналардан тұрады:</p>
+  
+  <p data-lang="ru">-астроцитов,</p>
+  <p data-lang="en" style="display:none">-astrocytes,</p>
+  <p data-lang="kz" style="display:none">-астроциттер,</p>
+  
+  <p data-lang="ru">-олигодендроцитов,</p>
+  <p data-lang="en" style="display:none">-oligodendrocytes,</p>
+  <p data-lang="kz" style="display:none">-олигодендроциттер,</p>
+  
+  <p data-lang="ru">-эпендимальных клеток,</p>
+  <p data-lang="en" style="display:none">-ependymal cells,</p>
+  <p data-lang="kz" style="display:none">-эпендима жасушалары,</p>
+  
+  <p data-lang="ru">-микроглии.</p>
+  <p data-lang="en" style="display:none">-microglia.</p>
+  <p data-lang="kz" style="display:none">-микроглия.</p>
+  
+  <img src="neuro2.jpeg" alt="Нейрон" class="neuron-img">
+  
+  <p data-lang="ru">Астроциты</p>
+  <p data-lang="en" style="display:none">Astrocytes</p>
+  <p data-lang="kz" style="display:none">Астроциттер</p>
+  
+  <p data-lang="ru">Астроциты — клетки звездчатой формы. Составляют 20-40% глиальных клеток. Участвуют в питании нейронов, обеспечении постоянства межклеточной среды, передаче информации между нейронами.</p>
+  <p data-lang="en" style="display:none">Astrocytes are star-shaped cells. They make up 20-40% of glial cells. They participate in the nutrition of neurons, maintaining the constancy of the intercellular environment, and transmitting information between neurons.</p>
+  <p data-lang="kz" style="display:none">Астроциттер - жұлдыз тәріздес жасушалар. Олар глия жасушаларының 20-40% құрайды. Нейрондарды қоректендіруге, жасушааралық ортаның тұрақтылығын қамтамасыз етуге, нейрондар арасында ақпарат алмасуға қатысады.</p>
+  
+  <p data-lang="ru">Олигодендроциты</p>
+  <p data-lang="en" style="display:none">Oligodendrocytes</p>
+  <p data-lang="kz" style="display:none">Олигодендроциттер</p>
+  
+  <p data-lang="ru">Олигодендроциты вырабатывают миелин для миелиновой оболочки, способствующей более быстрому проведению импульсов по аксону. Один олигодендроцит способен покрыть миелином до 50 сегментов аксона.</p>
+  <p data-lang="en" style="display:none">Oligodendrocytes produce myelin for the myelin sheath, which promotes faster impulse conduction along the axon. One oligodendrocyte can cover up to 50 axon segments with myelin.</p>
+  <p data-lang="kz" style="display:none">Олигодендроциттер аксон бойынша импульстерді тезірек өткізуге ықпал ететін миелин қабығын түзетін миелин өндіреді. Бір олигодендроцит 50-ге дейін аксон сегментін миелинмен қаптай алады.</p>
+  
+  <p data-lang="ru">Эпендимальные клетки</p>
+  <p data-lang="en" style="display:none">Ependymal cells</p>
+  <p data-lang="kz" style="display:none">Эпендима жасушалары</p>
+  
+  <p data-lang="ru">Эпендима — внутренняя выстилка системы желудочков головного и спинного мозга, а также спинномозгового канала. Состоит из эпендимальных клеток, участвующих в выработке и циркуляции спинномозговой жидкости.</p>
+  <p data-lang="en" style="display:none">Ependyma is the inner lining of the ventricular system of the brain and spinal cord, as well as the spinal canal. It consists of ependymal cells involved in the production and circulation of cerebrospinal fluid.</p>
+  <p data-lang="kz" style="display:none">Эпендима - ми мен жұлынның қарыншалар жүйесінің, сондай-ақ спинномозгтық каналдың ішкі қабаты. Ол спинномозгтық сұйықтықты өндіруге және айналымына қатысатын эпендима жасушаларынан тұрады.</p>
+  
+  <p data-lang="ru">Выводы</p>
+  <p data-lang="en" style="display:none">Conclusions</p>
+  <p data-lang="kz" style="display:none">Қорытынды</p>
+  
+  <p data-lang="ru">Центральная нервная система — часть нервной системы, состоящая из головного и спинного мозга.</p>
+  <p data-lang="en" style="display:none">The central nervous system is part of the nervous system consisting of the brain and spinal cord.</p>
+  <p data-lang="kz" style="display:none">Орталық жүйке жүйесі - ми мен жұлыннан тұратын жүйке жүйесінің бөлігі.</p>
+  
+  <p data-lang="ru">Структуры головного и спинного мозга состоят из разных тканей и клеток, в которых различают две большие группы: нейроны и глия.</p>
+  <p data-lang="en" style="display:none">The structures of the brain and spinal cord consist of different tissues and cells, which are divided into two large groups: neurons and glia.</p>
+  <p data-lang="kz" style="display:none">Ми мен жұлын құрылымдары әртүрлі тіндер мен жасушалардан тұрады, олар екі ірі топқа бөлінеді: нейрондар және глия.</p>
+  
+  <p data-lang="ru">Гемато-энцефалический барьер — важная структура ЦНС, не позволяющая проникать в мозг ядам, а также многим лекарственным препаратам, в том числе противоопухолевым.</p>
+  <p data-lang="en" style="display:none">The blood-brain barrier is an important structure of the CNS that prevents toxins and many drugs, including anticancer drugs, from entering the brain.</p>
+  <p data-lang="kz" style="display:none">Гемато-энцефаликалық кедергі - миге улардың және көптеген дәрілердің, соның ішінде қатерлі ісікке қарсы дәрілердің енуіне жол бермейтін ОЖЖ-нің маңызды құрылымы.</p>
+
+  <div class="quiz-container" id="quiz">
+    <h2 data-lang="ru">🧪 Тест</h2>
+    <h2 data-lang="en" style="display:none">🧪 Quiz</h2>
+    <h2 data-lang="kz" style="display:none">🧪 Тест</h2>
+    <div class="quiz-question" id="question"></div>
+    <div class="quiz-options" id="options"></div>
+    <button class="btn" onclick="nextQuestion()" id="nextBtn">
+      <span data-lang="ru">Далее</span>
+      <span data-lang="en" style="display:none">Next</span>
+      <span data-lang="kz" style="display:none">Әрі қарай</span>
+    </button>
+    <div class="quiz-result" id="result"></div>
+  </div>
+
+  <div style="text-align:center;">
+    <a href="index.html" class="btn">
+      <span data-lang="ru">← Назад к органам</span>
+      <span data-lang="en" style="display:none">← Back to organs</span>
+      <span data-lang="kz" style="display:none">← Мүшелерге оралу</span>
+    </a>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2025 AR Education</p>
+</footer>
+
+<script>
+// Вопросы для теста на разных языках
+const questions = {
+  ru: [
+    {
+      q: "Что такое нейроны?",
+      a: "Клетки, передающие информацию в нервной системе",
+      o: ["Кровяные клетки", "Клетки кожи", "Клетки, передающие информацию в нервной системе"]
+    },
+    {
+      q: "Какая часть нейрона передаёт сигнал дальше?",
+      a: "Аксон",
+      o: ["Дендрит", "Тело клетки", "Аксон"]
+    },
+    {
+      q: "Какой химический процесс происходит в синапсе?",
+      a: "Передача сигнала нейромедиатором",
+      o: ["Дыхание клетки", "Передача сигнала нейромедиатором", "Рост клетки"]
+    },
+    {
+      q: "Что произойдёт при повреждении нейронов?",
+      a: "Нарушения в работе нервной системы",
+      o: ["Улучшится зрение", "Ничего", "Нарушения в работе нервной системы"]
+    },
+    {
+      q: "Где находятся нейроны?",
+      a: "В головном и спинном мозге, а также в нервах",
+      o: ["Только в коже", "В костях", "В головном и спинном мозге, а также в нервах"]
+    }
+  ],
+  en: [
+    {
+      q: "What are neurons?",
+      a: "Cells that transmit information in the nervous system",
+      o: ["Blood cells", "Skin cells", "Cells that transmit information in the nervous system"]
+    },
+    {
+      q: "Which part of the neuron transmits the signal further?",
+      a: "Axon",
+      o: ["Dendrite", "Cell body", "Axon"]
+    },
+    {
+      q: "What chemical process occurs at the synapse?",
+      a: "Signal transmission by neurotransmitter",
+      o: ["Cell respiration", "Signal transmission by neurotransmitter", "Cell growth"]
+    },
+    {
+      q: "What happens when neurons are damaged?",
+      a: "Disorders in the functioning of the nervous system",
+      o: ["Vision improves", "Nothing", "Disorders in the functioning of the nervous system"]
+    },
+    {
+      q: "Where are neurons located?",
+      a: "In the brain and spinal cord, as well as in the nerves",
+      o: ["Only in the skin", "In bones", "In the brain and spinal cord, as well as in the nerves"]
+    }
+  ],
+  kz: [
+    {
+      q: "Нейрон деген не?",
+      a: "Жүйке жүйесінде ақпаратты жеткізетін жасушалар",
+      o: ["Қан жасушалары", "Тері жасушалары", "Жүйке жүйесінде ақпаратты жеткізетін жасушалар"]
+    },
+    {
+      q: "Нейронның қай бөлігі сигналды әрі жеткізеді?",
+      a: "Аксон",
+      o: ["Дендрит", "Жасуша денесі", "Аксон"]
+    },
+    {
+      q: "Синапста қандай химиялық процесс жүреді?",
+      a: "Нейромедиатор арқылы сигнал беру",
+      o: ["Жасушаның тыныс алуы", "Нейромедиатор арқылы сигнал беру", "Жасушаның өсуі"]
+    },
+    {
+      q: "Нейрондар зақымданса не болады?",
+      a: "Жүйке жүйесінің жұмысы бұзылады",
+      o: ["Көру жақсарады", "Ештеңе", "Жүйке жүйесінің жұмысы бұзылады"]
+    },
+    {
+      q: "Нейрондар қайда орналасқан?",
+      a: "Мида, жұлында және жүйкелерде",
+      o: ["Тек теріде", "Сүйектерде", "Мида, жұлында және жүйкелерде"]
+    }
+  ]
+};
+
+let current = 0, score = 0;
+let currentLang = 'ru';
+
+function loadQuestion() {
+  const q = questions[currentLang][current];
+  const questionText = currentLang === 'ru' ? 'Вопрос' : currentLang === 'en' ? 'Question' : 'Сұрақ';
+  document.getElementById("question").textContent = `${questionText} ${current + 1}: ${q.q}`;
+  document.getElementById("options").innerHTML = q.o.map(opt =>
+    `<label><input type="radio" name="answer" value="${opt}"> ${opt}</label>`
+  ).join("");
+}
+
+function nextQuestion() {
+  const selected = document.querySelector('input[name="answer"]:checked');
+  if (!selected) {
+    alert(currentLang === 'ru' ? "Пожалуйста, выберите ответ." : 
+          currentLang === 'en' ? "Please select an answer." : "Жауапты таңдаңыз.");
+    return;
+  }
+  if (selected.value === questions[currentLang][current].a) score++;
+
+  current++;
+  if (current < questions[currentLang].length) {
+    loadQuestion();
+  } else {
+    const resultText = currentLang === 'ru' ? `Вы набрали ${score} из ${questions[currentLang].length} правильных ответов!` :
+                     currentLang === 'en' ? `You scored ${score} out of ${questions[currentLang].length} correct answers!` :
+                     `Сіз ${questions[currentLang].length} дұрыс жауаптың ${score} ұпайын жинадыңыз!`;
+    document.getElementById("quiz").innerHTML =
+      `<h2>${currentLang === 'ru' ? 'Результат' : currentLang === 'en' ? 'Result' : 'Нәтиже'}</h2><p class="quiz-result">${resultText}</p>`;
+  }
+}
+
+// Функция для применения языка
+function applyLanguage(lang) {
+  // Устанавливаем атрибут lang для html
+  document.documentElement.lang = lang;
+  
+  // Показываем/скрываем элементы по языку
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    el.style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
+  });
+  
+  // Обновляем активные кнопки языков
+  document.querySelectorAll('.language-btn').forEach(btn => {
+    if (btn.textContent.includes(lang === 'ru' ? 'Русский' : 
+                               lang === 'en' ? 'English' : 'Қазақша')) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+  
+  // Обновляем текущий язык для теста
+  currentLang = lang;
+  
+  // Обновляем title страницы
+  updatePageTitle(lang);
+  
+  // Перезагружаем вопросы теста
+  current = 0;
+  score = 0;
+  loadQuestion();
+}
+
+// Функция для обновления title страницы
+function updatePageTitle(lang) {
+  const titles = {
+    'ru': 'Нейроны — AR Education',
+    'en': 'Neurons — AR Education',
+    'kz': 'Нейрондар — AR Education'
+  };
+  document.title = titles[lang] || titles['ru'];
+}
+
+// Функция для изменения языка с сохранением
+function changeLanguage(lang) {
+  // Показываем индикатор загрузки
+  const loadingIndicator = document.getElementById('languageLoading');
+  loadingIndicator.style.display = 'flex';
+  
+  // Сохраняем выбранный язык
+  localStorage.setItem('selectedLanguage', lang);
+  
+  // Применяем язык после небольшой задержки для плавности
+  setTimeout(() => {
+    applyLanguage(lang);
+    loadingIndicator.style.display = 'none';
+  }, 100);
+}
+
+// Контрастный режим
+function toggleContrast() {
+  const isContrast = document.body.classList.toggle('contrast');
+  localStorage.setItem('contrastMode', isContrast ? 'on' : 'off');
+}
+
+// Инициализация при загрузке
+window.addEventListener('DOMContentLoaded', () => {
+  // Контрастный режим
+  if (localStorage.getItem('contrastMode') === 'on') {
+    document.body.classList.add('contrast');
+  }
+  
+  // Проверяем и применяем сохраненный язык
+  const savedLang = localStorage.getItem('selectedLanguage') || 'ru';
+  applyLanguage(savedLang);
+  
+  // Добавляем обработчик для отслеживания изменений в localStorage
+  window.addEventListener('storage', (event) => {
+    if (event.key === 'selectedLanguage') {
+      applyLanguage(event.newValue);
+    }
+  });
+});
+</script>
+</body>
+</html>
